@@ -34,7 +34,6 @@ const Home: React.FC<Props> = () => {
 
     return (<>
         Home
-       
     </>);
 };
 

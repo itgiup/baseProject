@@ -7,8 +7,9 @@ import { toggleDark } from '../store/settings';
 
 import i18n from '../services/i18n';
 import { change, loadSettings, } from '../store/settings';
-import Wallet from './Wallet';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
+import '@rainbow-me/rainbowkit/styles.css';
 
 const { log, error, warn } = console
 
@@ -50,9 +51,9 @@ const MainMenu: React.FC<Props> = () => {
 
         } else if (e.key === "clean") {
 
-        } else if (e.key === "reset") {
-
         } else if (e.key === "wallet") {
+
+        } else if (e.key === "reset") {
 
         }
 
@@ -76,9 +77,10 @@ const MainMenu: React.FC<Props> = () => {
                     icon: <img src='/favicon.ico' style={{ width: "38px" }} />,// <HomeOutlined />,
                 },
                 {
-                    label: (<Wallet />),
+                    label: (<ConnectButton />),
                     key: 'wallet',
                 },
+                /** app functions */
                 {
                     label: "",
                     key: 'reload',
@@ -115,7 +117,6 @@ const MainMenu: React.FC<Props> = () => {
                     ),
                     key: 'theme',
                 },
-
             ]} />
     </>);
 };

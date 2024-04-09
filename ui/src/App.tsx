@@ -16,6 +16,11 @@ import "./App.scss";
 import { MainMenu } from './components';
 import { loadSettings } from './store/settings';
 
+import { WagmiProvider } from 'wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { darkTheme, lightTheme, getDefaultConfig, RainbowKitProvider, connectorsForWallets } from '@rainbow-me/rainbowkit';
+import { walletConfig } from './walletConfig';
+
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
 dayjs.extend(weekday)
@@ -26,6 +31,9 @@ dayjs.extend(weekYear)
 const { Header, Content, Footer, } = Layout;
 const { defaultAlgorithm, darkAlgorithm } = theme;
 
+/** rainbowkit.com/docs/installation */
+const queryClient = new QueryClient()
+/** /rainbowkit.com/docs/installation */
 
 const App: React.FC = () => {
   const dispatch = useStoreDispatch();
@@ -51,12 +59,6 @@ const App: React.FC = () => {
     i18n.changeLanguage(settings?.lang)
   }, [settings?.lang])
 
-
-
-  const onSelectSymbol = (s: string) => {
-    window.location.href = "/pairs/" + s
-  }
-
   return (<ConfigProvider
     theme={{
       algorithm: [
@@ -66,30 +68,39 @@ const App: React.FC = () => {
       }
     }}>
 
-    <Layout>
 
-      <Header>
-        <div className="logo"></div>
-        <MainMenu />
-      </Header>
+    <WagmiProvider config={walletConfig}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider theme={settings.isDark ? darkTheme() : lightTheme()}>
+
+          <Layout>
+
+            <Header>
+              <div className="logo"></div>
+              <MainMenu />
+            </Header>
 
 
-      <Content style={{ padding: '10px' }}>
-        <Outlet />
-      </Content>
+            <Content style={{ padding: '10px' }}>
+              <Outlet />
+            </Content>
 
-      <FloatButton.BackTop style={{ bottom: "5px" }} />
+            <FloatButton.BackTop style={{ bottom: "5px" }} />
 
-      <Footer style={{ textAlign: 'center' }}>
-        <Row justify="center" className='footer-row'>
-          <Col> ©2024 </Col>
-          <Col>
-            <a className="menu__link" target="_blank" href="https:///about">@</a> |&nbsp;
-            <a className="menu__link" target="_blank" href="https://"></a> </Col>
-          <Col>All Rights Reserved</Col>
-        </Row>
-      </Footer>
-    </Layout>
+            <Footer style={{ textAlign: 'center' }}>
+              <Row justify="center" className='footer-row'>
+                <Col> ©2024 </Col>
+                <Col>
+                  <a className="menu__link" target="_blank" href="https:///about">@</a> |&nbsp;
+                  <a className="menu__link" target="_blank" href="https://"></a> </Col>
+                <Col>All Rights Reserved</Col>
+              </Row>
+            </Footer>
+          </Layout>
+
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   </ConfigProvider>);
 };
 
