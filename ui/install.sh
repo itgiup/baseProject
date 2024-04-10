@@ -6,5 +6,4 @@ yarn add i18next i18next-browser-languagedetector i18next-http-backend  react-i1
 yarn add axios bignumber.js ethers
 # console-browserify crypto-browserify crypto-js   https-browserify stream-http 
 
-yarn add @rainbow-me/rainbowkit
-yarn add wagmi viem @tanstack/react-query
+yarn add @rainbow-me/rainbowkit wagmi viem @tanstack/react-query

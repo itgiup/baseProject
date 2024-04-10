@@ -3,13 +3,13 @@ import { useLocation } from 'react-router-dom';
 import { useStoreDispatch, useStore } from "../store/hooks";
 import { Switch, type MenuProps, Menu } from 'antd';
 import { AlertOutlined, GlobalOutlined, LineChartOutlined, DeleteOutlined, ReloadOutlined, ThunderboltOutlined, BuildOutlined } from '@ant-design/icons';
-import { toggleDark } from '../store/settings';
+import '@rainbow-me/rainbowkit/styles.css';
 
+import { toggleDark } from '../store/settings';
 import i18n from '../services/i18n';
 import { change, loadSettings, } from '../store/settings';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-import '@rainbow-me/rainbowkit/styles.css';
+import WalletConnectButton from './WalletConnectButton';
 
 const { log, error, warn } = console
 
@@ -77,7 +77,7 @@ const MainMenu: React.FC<Props> = () => {
                     icon: <img src='/favicon.ico' style={{ width: "38px" }} />,// <HomeOutlined />,
                 },
                 {
-                    label: (<ConnectButton />),
+                    label: (<WalletConnectButton />),
                     key: 'wallet',
                 },
                 /** app functions */

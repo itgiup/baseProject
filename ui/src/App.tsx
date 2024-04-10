@@ -16,10 +16,11 @@ import "./App.scss";
 import { MainMenu } from './components';
 import { loadSettings } from './store/settings';
 
-import { WagmiProvider } from 'wagmi';
+import {  WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { darkTheme, lightTheme, getDefaultConfig, RainbowKitProvider, connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { walletConfig } from './walletConfig';
+const { log } = console;
 
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
@@ -58,6 +59,7 @@ const App: React.FC = () => {
   useEffect(() => {
     i18n.changeLanguage(settings?.lang)
   }, [settings?.lang])
+
 
   return (<ConfigProvider
     theme={{
