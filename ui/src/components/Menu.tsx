@@ -77,7 +77,7 @@ const MainMenu: React.FC<Props> = () => {
                     icon: <img src='/favicon.ico' style={{ width: "38px" }} />,// <HomeOutlined />,
                 },
                 {
-                    label: (<WalletConnectButton />),
+                    label: ("w"),
                     key: 'wallet',
                 },
                 /** app functions */

@@ -5,6 +5,7 @@ import { AlertOutlined, GlobalOutlined, } from '@ant-design/icons';
 
 import i18n from '../services/i18n';
 import { change, loadSettings, } from '../store/settings';
+import WalletConnectButton from '../components/WalletConnectButton';
 
 
 const { log, error, warn } = console
@@ -34,6 +35,8 @@ const Home: React.FC<Props> = () => {
 
     return (<>
         Home
+
+        <WalletConnectButton />
     </>);
 };
 
