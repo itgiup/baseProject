@@ -1,0 +1,2 @@
+yarn add-D @types/file-saver @types/lodash @types/node @types/react @types/react-dom @types/react-helmet @typescript-eslint/eslint-plugin @typescript-eslint/parser @vitejs/plugin-react-swc eslint eslint-plugin-react-hooks eslint-plugin-react-refresh sass typescript vite
+yarn add @ant-design/icons @reduxjs/toolkit antd axios dayjs file-saver history lodash moment react react-copy-to-clipboard react-custom-scrollbars-2 react-dom react-helmet react-icons react-redux react-router-dom redux-persist styled-components

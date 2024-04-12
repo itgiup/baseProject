@@ -1,0 +1,17 @@
+version: '3'
+services:
+  database:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: baseProject
+    volumes:
+      - ./docker_data/mongo:/data/db
+  redis:
+    image: redis
+    volumes:
+      - ./docker_data/redis:/data
+    environment:
+      - REDIS_PASSWORD=baseProject
+    command: /bin/sh -c "redis-server --requirepass $$REDIS_PASSWORD"

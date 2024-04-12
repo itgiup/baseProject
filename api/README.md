@@ -1,0 +1,101 @@
+# Dev
+```bash
+docker compose up
+yarn dev
+```
+
+
+# Deploy
+1. Tạo gg recaptcha
+
+2. Kết nối vps
+
+3. Cài mongodb, redis, nginx, node, pm2
+
+5. Tạo .env cho 3 repo, .env1, .env2 cho repo ui, admin ( update port, domain, mongodb name, captcha, ...), tạo token trong admin và dán vào .env của client
+
+6. Run: yarn install, yarn build ở 3 repo
+
+7. Tạo file ecosystem.config.json ở cùng thư mục với 3 repo
+```json
+{
+  "apps": [
+    {
+      "name": "base api",
+      "cwd": "./api",
+      "script": "npm",
+      "args" : "start",
+      "env": {
+        "PORT": "3001",
+        "MONGO_NAME": "baseproject",
+        "GROUP_ID": "-1111111111",
+        "BOT_TOKEN": "00000000:xxxxxxxxxxxxxxxxxxxxxxxx"
+      }
+    },
+    {
+      "name": "base client",
+      "cwd": "./client",
+      "script": "npx",
+      "args" : "serve -s build -p 3000"
+    },
+    {
+      "name": "base admin",
+      "cwd": "./admin",
+      "script": "npx",
+      "args" : "serve -s build -p 3002"
+    },
+  ]
+}
+```
+
+8. Run: pm2 start ecosystem.config.json
+
+9. cd /etc/nginx/sites-available/ , tạo file base.config
+```yaml
+# base api
+server{
+    listen 80;
+    server_name api.baseproject.demo;
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_pass http://127.0.0.1:3012;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
+# base client
+server{
+    listen 80;
+    server_name baseproject.demo;
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
+# base admin
+server{
+    listen 80;
+    server_name admin.baseproject.demo;
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_pass http://127.0.0.1:3002;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
+```
+
+10. Khởi động lại nginx
+```bash
+sudo ln -s /etc/nginx/sites-avaiable/extension.config /et/nginx/sites-enabled/
+sudo systemctl restart nginx
+```
+11. Check ...

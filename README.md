@@ -1,4 +1,4 @@
 Một dự án cơ bản: 
-- React
-- server
-- admin
+- client React
+- api server
+- admin dashboard
