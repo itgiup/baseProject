@@ -7,13 +7,10 @@ import {
   FaHome,
   FaUser,
   FaChrome,
-  FaCookie,
-  FaCookieBite,
-  FaAd,
-  FaUserTie
 } from "react-icons/fa";
+import { LuListTodo } from "react-icons/lu";
 import Dashboard from "../pages/Dashboard";
-import Cookie from "../pages/Todo";
+import Todo from "../pages/Todo";
 import User from "../pages/User";
 import ClientAppToken from "../pages/ClientAppToken";
 
@@ -31,16 +28,16 @@ const menus: MenuItem[] = [{
   element: <Dashboard />,
   icon: <FaHome />
 }, {
-  label: "Card",
-  key: "cookie",
-  path: "/cookie",
-  icon: <FaCookie />,
+  label: "Todo",
+  key: "todo",
+  path: "/todo",
+  icon: <LuListTodo />,
   children: [{
-    label: "Card",
-    key: "cookie_item",
+    label: "Todo",
+    key: "todo_item",
     path: "/",
-    element: <Cookie />,
-    icon: <FaCookieBite />
+    element: <Todo />,
+    icon: <LuListTodo />
   }]
 }, {
   label: "Client App Token",

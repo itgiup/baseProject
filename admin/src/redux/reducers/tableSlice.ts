@@ -4,9 +4,7 @@ interface InitialState {
   [table: string]: string[]
 }
 const initialState: InitialState = {
-  "cookie_item": [],
-  "cookie_adaccount": [],
-  "cookie_business": [],
+  "todo": [],
   "clientapptoken": [],
   "user": []
 };

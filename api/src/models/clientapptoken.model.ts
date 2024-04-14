@@ -48,7 +48,6 @@ const schema = new Schema<IExtension>({
   timestamps: true,
   strict: false,
 });
-console.log(schema);
 
 const ClientAppToken = model<IExtension, IExtensionModel>("ClientAppToken", schema);
 export {

@@ -131,21 +131,21 @@ const ClientAppToken = () => {
       )
     }
   },
-    {
-      title: "Timeout",
-      dataIndex: "timeout",
-      key: "timeout",
-      sorter: false,
-      showSorterTooltip: false,
-      render: (value: number, record) => {
-        return (
-            <>
-              {value}s
-            </>
-        )
-      }
-    },
-    {
+  {
+    title: "Timeout",
+    dataIndex: "timeout",
+    key: "timeout",
+    sorter: false,
+    showSorterTooltip: false,
+    render: (value: number, record) => {
+      return (
+        <>
+          {value}s
+        </>
+      )
+    }
+  },
+  {
     title: "Timeout 2",
     dataIndex: "timeout2",
     key: "timeout2",
@@ -159,19 +159,19 @@ const ClientAppToken = () => {
       )
     }
   },
-    {
-      title: "Skip OTP",
-      dataIndex: "skipOTP",
-      key: "skipOTP",
-      sorter: false,
-      showSorterTooltip: false,
-      render: (value: boolean, record) => {
-        return (
-            <>{value ? "Yes" : "No"}</>
-        )
-      }
-    },
-    {
+  {
+    title: "Skip OTP",
+    dataIndex: "skipOTP",
+    key: "skipOTP",
+    sorter: false,
+    showSorterTooltip: false,
+    render: (value: boolean, record) => {
+      return (
+        <>{value ? "Yes" : "No"}</>
+      )
+    }
+  },
+  {
     title: "Action",
     dataIndex: "id",
     key: "action",

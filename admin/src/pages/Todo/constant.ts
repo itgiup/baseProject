@@ -1,4 +1,4 @@
-import api from "../../services/cookie";
+import api from "../../services/todo";
 export const ITEM_NAME = "Cards";
 export const SEARCH_COLUMNS: string[] = ["ip", "country", "uid"];
 export const API = api;
