@@ -1,8 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { Static, Type } from "@sinclair/typebox";
 import { ParamSchema } from "../../../utils/datatable";
-import bcrypt from "bcrypt";
-const saltRounds = 10;
+import { hashPassword } from "../../ajax/register";
 
 const BodySchema = Type.Object({
   username: Type.Optional(Type.String()),
@@ -28,8 +27,7 @@ export default async (fastify: FastifyInstance) => {
         const { username, password } = request.body;
         if (username) response.username = username;
         if (password) {
-          const salt = await bcrypt.genSalt(saltRounds);
-          const hash = await bcrypt.hash(password, salt);
+          const hash = await hashPassword(password);
           response.password = hash;
         }
         await response.save();

@@ -1,15 +1,13 @@
 import axios from "axios";
-import { API_BASE_URL } from "@configs/index";
-import store from "@redux/store";
-import { loginFailed } from "@redux/reducers/authSlice";
+import { API_BASE_URL, API_PREFIX } from "../configs";
 const axiosAuthInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: `${API_BASE_URL}/${API_PREFIX}`,
   headers: {
     "content-type": "application/json"
   },
 });
 axiosAuthInstance.interceptors.request.use(async (config: any) => {
-  const jwtToken = store.getState().auth.token;
+  const jwtToken = localStorage.getItem("token");
   if (jwtToken) {
     config.headers = {
       ...config.headers,
@@ -21,9 +19,6 @@ axiosAuthInstance.interceptors.request.use(async (config: any) => {
 axiosAuthInstance.interceptors.response.use((response) => {
   return response;
 }, (error) => {
-  if (error.response.status === 401) {
-    store.dispatch(loginFailed(error?.response?.data?.message || error));
-  }
-  return Promise.reject(error);
+  throw error;
 });
 export default axiosAuthInstance;

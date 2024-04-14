@@ -16,7 +16,7 @@ import storage from "redux-persist/lib/storage";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth", "theme", "table"],
+  whitelist: ["auth", "theme", "pids", "table"],
 };
 const rootReducer = combineReducers({
   auth: authSlice,
@@ -33,7 +33,7 @@ export const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     })
-  },
+  }
 })
 export const persistor = persistStore(store);
 export type RootState = ReturnType<typeof store.getState>;

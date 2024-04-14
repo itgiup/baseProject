@@ -3,9 +3,7 @@
   -ms-user-select: none;
   user-select: none;
 }
-html {
-  background-color: #fff;
-}
+
 // Select color radio
 .radio-blue .ant-radio-inner {
   background-color: #1890ff;
@@ -97,13 +95,17 @@ html {
   background: rgba(255, 255, 255, 0.3);
 }
 
+.ant-breadcrumb {
+  margin: 16px 0;
+}
+
 .ant-layout {
   min-height: 100vh;
 }
 
 .ant-layout-header {
   display: flex;
-  padding: 0 18px 0 0 !important;
+  padding: 0px 18px 0px 0 !important;
   -webkit-box-shadow: 0 1px 3px rgba(57, 63, 72, 0.3);
   -moz-box-shadow: 0 1px 3px rgba(57, 63, 72, 0.3);
   box-shadow: 0 1px 3px rgba(57, 63, 72, 0.3);
@@ -113,8 +115,6 @@ html {
   -webkit-box-shadow: 0 1px 1px rgba(57, 63, 72, 0.3);
   -moz-box-shadow: 0 1px 1px rgba(57, 63, 72, 0.3);
   box-shadow: 0 1px 1px rgba(57, 63, 72, 0.3);
-  padding: 0 !important;
-  position: fixed !important;
 }
 
 .ant-logo {
@@ -137,8 +137,23 @@ html {
     position: absolute;
     top: 50%;
     left: 50%;
-    z-index: 9999;
-    scale: 1.5;
+  }
+}
+
+.ant-terminal {
+  position: relative;
+  min-height: 300px;
+  overflow: auto;
+  color: #D8E4DD;
+  // font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  // font-size: 14px;
+  background: #051D23;
+  user-select: none;
+
+  .ant-spin-loading {
+    position: absolute;
+    top: 47%;
+    left: 47%;
   }
 }
 
@@ -225,12 +240,12 @@ html {
 .ant-fixed-header {
   position: fixed;
   top: 0;
-  padding: 0;
+  padding: 0px;
   height: 48px;
   line-height: 48px;
   width: 100%;
   z-index: 100;
-  right: 0;
+  right: 0px;
 }
 
 .site-layout {
@@ -261,7 +276,9 @@ html {
   margin-bottom: 20px;
 }
 
-
+// .ant-input-number {
+//     width: 100%;
+// }
 .site-tag-plus {
   background: #fff;
   border-style: dashed;
@@ -310,8 +327,8 @@ html {
 }
 
 .logs-title {
-  padding: 0;
-  margin: 0 12px 0 0;
+  padding: 0px;
+  margin: 0px 12px 0px 0px;
   cursor: inherit;
   transition: background-color 0.05s ease-in-out 0s, color 0.05s ease-in-out 0s, stroke 0.05s ease-in-out 0s;
   border-radius: 8px;
@@ -331,10 +348,6 @@ html {
 
 .ant-layout-sider-children > div > div {
   margin-bottom: 45px !important;
-}
-
-:where(.css-dev-only-do-not-override-1ejprrx).ant-collapse>.ant-collapse-item >.ant-collapse-header {
-  padding-inline-start: 0 !important;
 }
 
 @media only screen and (max-width: 768px) {
@@ -413,6 +426,7 @@ html {
   }
 
   .btn-trigger-menu {
+    border-color: unset;
     box-shadow: unset;
     outline: none;
     border: unset;
@@ -420,6 +434,7 @@ html {
     &:hover,
     &:focus {
       color: unset !important;
+      border-color: unset !important;
       box-shadow: unset !important;
       outline: none !important;
       border: unset !important;

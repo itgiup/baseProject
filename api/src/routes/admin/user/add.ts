@@ -1,11 +1,11 @@
 import { FastifyInstance } from "fastify";
 import { Static, Type } from "@sinclair/typebox";
-import bcrypt from "bcrypt";
-const saltRounds = 10;
+import { hashPassword } from "../../ajax/register";
 
 const BodySchema = Type.Object({
   username: Type.String(),
-  password: Type.String()
+  password: Type.String(),
+  role: Type.String(),
 });
 
 export default async (fastify: FastifyInstance) => {
@@ -19,16 +19,17 @@ export default async (fastify: FastifyInstance) => {
     },
     handler: async (request, reply) => {
       try {
-        const { username, password } = request.body;
-        const salt = await bcrypt.genSalt(saltRounds);
-        const hash = await bcrypt.hash(password, salt);
+        const { username, password, role } = request.body;
+
+        const hash = await hashPassword(password);
         const user = await fastify.mongoose.User.findOne({
           username
         });
         if (user) throw new Error("User already exists");
         const response = await fastify.mongoose.User.create({
           username,
-          password: hash
+          password: hash,
+          role
         });
         reply.send({
           success: true,

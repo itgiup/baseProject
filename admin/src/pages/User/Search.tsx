@@ -1,55 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, memo } from "react";
 import { Input, Space } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { SearchProps } from "@typings/datatable";
-import { useDebounce } from "@utils";
+import { InitalProps } from "../../typings/datatable";
 
-const Search: React.FC<SearchProps> = ({ setState }) => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
-  useEffect(
-    () => {
-      if (debouncedSearchTerm) {
-        if (setState) setState(prevState => ({
-          ...prevState,
-          filters: {
-            ...prevState.filters,
-            keyword: debouncedSearchTerm
-          },
-          pagination: {
-            ...prevState.pagination,
-            current: 1
-          },
-          updated: prevState.updated + 1
-        }))
-      } else {
-        if (setState) setState(prevState => ({
-          ...prevState,
-          filters: {
-            ...prevState.filters,
-            keyword: ""
-          },
-          pagination: {
-            ...prevState.pagination,
-            current: 1
-          },
-          updated: prevState.updated + 1
-        }))
-      }
-    },
-    [debouncedSearchTerm]
-  );
+const Search: React.FC<InitalProps> = (props) => {
+  const { setState } = props;
+
+  const [searchTerms, setSearchTerms] = useState<string>("");
+  const onKeySearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    setSearchTerms(value);
+  }
+
+  const onSubmitSearch = (e: React.FormEvent<HTMLInputElement>) => {
+    if (setState) setState(prevState => ({
+      ...prevState,
+      filters: {
+        ...prevState.filters,
+        keyword: e.currentTarget.value
+      },
+      updated: prevState.updated + 1
+    }))
+  }
+
   return (
     <>
       <Space>
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={onKeySearch}
+          value={searchTerms}
+          onPressEnter={onSubmitSearch}
         />
       </Space>
     </>
   )
 };
 
-export default Search;
+export default memo(Search);

@@ -1,35 +1,48 @@
-import React, { useState } from "react";
-import { ItemProps } from "@typings/datatable";
-import { API, ITEM_NAME, ROLES, UserState } from "./constant";
-import { message, Button, Form, Input, Modal, Select, Tooltip } from "antd";
+import React, { memo, useState } from "react";
+import { InitalProps } from "../../typings/datatable";
+import { API, ITEM_NAME, UserState } from "./constant";
+import { message, Button, Form, Input, Modal, Select, Space, Tooltip } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
-const Edit: React.FC<ItemProps<UserState>> = ({ onReload, item }) => {
+const Edit: React.FC<InitalProps> = (props) => {
+  const { onReload, item } = props;
   const initialValues = {
     ...item
   }
   const [visible, setVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
+  
   const onSubmit = async (values: UserState) => {
     try {
-      setLoading(true);
-      await API.editItem(item.id, values);
-      message.open({
-        type: "success",
-        content: `Đã sửa ${ITEM_NAME} thành công`
-      });
-      setVisible(false);
-      onReload();
-    } catch (ex) {
+      if (API.editItem) {
+        setLoading(true);
+        const response = await API.editItem(item.id, values);
+        if (response.data.success) {
+          message.open({
+            type: "success",
+            content: `Đã sửa ${ITEM_NAME} thành công`
+          });
+          setVisible(false);
+          if (onReload) onReload();
+        } else {
+          message.open({
+            type: "error",
+            content: response.data.message
+          });
+        }
+      }
+    } catch (err) {
+      console.error(err);
       message.open({
         type: "error",
-        content: ex?.message || "Đã xảy ra lỗi"
+        content: "Đã xảy ra lỗi"
       });
     } finally {
       setLoading(false);
     }
   }
+
   return (
     <>
       <Tooltip title="Sửa">
@@ -44,15 +57,20 @@ const Edit: React.FC<ItemProps<UserState>> = ({ onReload, item }) => {
         open={visible}
         onCancel={() => setVisible(false)}
         destroyOnClose
-        okText="Lưu"
-        cancelText="Huỷ"
-        onOk={() => form.submit()}
-        okButtonProps={{
-          loading
-        }}
-        cancelButtonProps={{
-          loading
-        }}
+        footer={<div className="right-aligned">
+          <Space>
+            <Button
+              loading={loading}
+              htmlType="button"
+              onClick={() => setVisible(false)}
+            >
+              Huỷ
+            </Button>
+            <Button form="frm-edit" htmlType="submit" type="primary" loading={loading}>
+              Lưu
+            </Button>
+          </Space>
+        </div>}
       >
         <Form
           form={form}
@@ -74,17 +92,10 @@ const Edit: React.FC<ItemProps<UserState>> = ({ onReload, item }) => {
           >
             <Input.Password />
           </Form.Item>
-          <Form.Item
-            label="Role"
-            name="role"
-            rules={[{ required: true, message: "Thông tin bắt buộc" }]}
-          >
-            <Select options={ROLES} />
-          </Form.Item>
         </Form>
       </Modal>
     </>
   )
 }
 
-export default Edit;
+export default memo(Edit);

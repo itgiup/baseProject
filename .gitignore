@@ -130,3 +130,4 @@ dist
 .pnp.*
 ./ui1
 docker_data/
+admin_

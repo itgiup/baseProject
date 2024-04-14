@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 interface UserState {
   username: string,
-  role: "admin" | "user"
+  permission: "admin" | "user"
 }
 interface InitialState {
   isAuthenticated?: boolean,
@@ -12,7 +12,7 @@ interface InitialState {
 }
 const initialState: InitialState = {
   isAuthenticated: false,
-  token: "",
+  token: '',
   error: undefined,
 };
 const authSlice = createSlice({
@@ -23,7 +23,7 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.user = action.payload.user;
       state.token = action.payload.token;
-      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("token", action.payload.token || "");
     },
     loginFailed: (state, action: PayloadAction<InitialState>) => {
       state.isAuthenticated = false;

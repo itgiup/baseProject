@@ -16,10 +16,12 @@ export default async (fastify: FastifyInstance) => {
         const query = genQuery(request.body);
         const response: any = await fastify.mongoose.User.find(query.where)
           .select("username")
+          .select("role")
           .sort(query.sort)
           .limit(query.limit)
           .skip(query.skip);
-        const total = await fastify.mongoose.User.count(query.where);
+
+        const total = await fastify.mongoose.User.countDocuments(query.where);
         reply.send({
           success: true,
           data: response,

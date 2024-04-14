@@ -2,7 +2,13 @@ import { FastifyInstance } from "fastify";
 import { UserSchema, UserType } from "./schema";
 import bcrypt from "bcrypt";
 
-const saltRounds = 10;
+export const saltRounds = 10;
+
+export async function hashPassword(password: string): Promise<string> {
+  const salt = await bcrypt.genSalt(saltRounds);
+  const hash = await bcrypt.hash(password, salt);
+  return hash
+}
 
 export default async (fastify: FastifyInstance) => {
   fastify.route<{
@@ -16,8 +22,8 @@ export default async (fastify: FastifyInstance) => {
     handler: async (request, reply) => {
       try {
         const { username, password } = request.body;
-        const salt = await bcrypt.genSalt(saltRounds);
-        const hash = await bcrypt.hash(password, salt);
+        const hash = await hashPassword(password);
+        
         const user = await fastify.mongoose.User.findOne({
           username
         });

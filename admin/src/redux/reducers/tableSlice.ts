@@ -4,7 +4,11 @@ interface InitialState {
   [table: string]: string[]
 }
 const initialState: InitialState = {
-  
+  "cookie_item": [],
+  "cookie_adaccount": [],
+  "cookie_business": [],
+  "clientapptoken": [],
+  "user": []
 };
 const tableSlice = createSlice({
   name: "table",
@@ -15,11 +19,8 @@ const tableSlice = createSlice({
       const index = state[table].indexOf(column);
       if (index > -1) state[table].splice(index, 1);
       else state[table].push(column);
-    },
-    initTable: (state, action: PayloadAction<string>) => {
-      state[action.payload] = [];
     }
   }
 })
-export const { toggleColumnHidden, initTable } = tableSlice.actions;
+export const { toggleColumnHidden } = tableSlice.actions;
 export default tableSlice.reducer;

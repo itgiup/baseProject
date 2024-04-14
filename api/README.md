@@ -12,9 +12,37 @@ yarn dev
 
 3. Cài mongodb, redis, nginx, node, pm2
 
-5. Tạo .env cho 3 repo, .env1, .env2 cho repo ui, admin ( update port, domain, mongodb name, captcha, ...), tạo token trong admin và dán vào .env của client
+4. Tạo .env cho 3 repo, .env1, .env2 cho repo client, admin ( update port, domain, mongodb name, captcha, ...), tạo token trong admin và dán vào .env của client
 
 6. Run: yarn install, yarn build ở 3 repo
+
+5. Database
+  <!-- - Đăng nhập vào db bằng mongosh, với:
+    + `-u` là `MONGO_USERNAME` lấy trong file `.env` hoặc `MONGO_INITDB_ROOT_USERNAME` trong `docker-compose.yml`
+    + `-p` là `MONGO_PASSWORD` lấy trong file `.env` hoặc `MONGO_INITDB_ROOT_PASSWORD` trong `docker-compose.yml`
+
+```bash
+mongosh
+```
+  - Tạo tài khoản admin, mật khẩu là 123456
+```bash
+use baseProject
+db.users.insert({ username: 'it', password: '$2b$10$YUw9wzDnkgSeh0EGPKa7mObtlSO48r8Mm1F1OVx9E9OrxgT3syRCC' })
+``` -->
+
+
+  - file `src/init.ts` dùng để tạo database với ràng buộc, để chạy khởi tạo ban đầu, dùng lệnh:
+```bash
+yarn initapp
+```
+  - Mặc định: `username: admin`, `password: 123456`
+  - *Mật khẩu được mã hóa dùng thư viện `bcrypt`*
+```typescript
+const saltRounds = 10;
+const salt = await bcrypt.genSalt(saltRounds);
+const hash = await bcrypt.hash(password, salt);
+```
+
 
 7. Tạo file ecosystem.config.json ở cùng thư mục với 3 repo
 ```json

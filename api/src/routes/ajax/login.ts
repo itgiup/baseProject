@@ -2,6 +2,8 @@ import { FastifyInstance } from "fastify";
 import { UserSchema, UserType } from "./schema";
 import bcrypt from "bcrypt";
 
+const { log } = console;
+
 export default async (fastify: FastifyInstance) => {
   fastify.route<{
     Body: UserType
@@ -12,6 +14,8 @@ export default async (fastify: FastifyInstance) => {
       body: UserSchema
     },
     handler: async (request, reply) => {
+      log(request.url, request.params)
+
       try {
         // if (!request?.recaptcha?.success) {
         const { username, password } = request.body;

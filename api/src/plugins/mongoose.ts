@@ -1,13 +1,13 @@
 import fastifyPlugin from "fastify-plugin";
-import { Cookie } from "../models/cookies.model";
-import { Extension } from "../models/extension.model";
 import { User } from "../models/user.model";
+import { ClientAppToken } from "../models/clientapptoken.model";
+import { Todo } from "../models/todo.model";
 
 export default fastifyPlugin(async (server, options) => {
   const mongoose = {
-    Cookie,
-    Extension,
-    User
+    User,
+    Extension: ClientAppToken,
+    Todo
   }
   server.decorate("mongoose", mongoose);
 });

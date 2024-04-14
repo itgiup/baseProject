@@ -1,31 +1,35 @@
 import React, { useState } from "react";
 import { Button, Form, Input, Space, message } from "antd";
 import { UserOutlined, EyeTwoTone, EyeInvisibleOutlined, LockOutlined } from "@ant-design/icons";
-import { useAppDispatch } from "@redux/hooks";
-import { API_BASE_URL } from "@configs/index";
+import { useAppDispatch } from "../../redux/hooks";
+import { API_BASE_URL, API_PREFIX, RECAPTCHA_SITEKEY } from "../../configs";
 import { Helmet } from "react-helmet";
 import styles from "./style.module.scss";
-import ImgLogo from "@assets/logo.svg";
-import ImgBackground from "@assets/background.png";
+import ImgLogo from "../../assets/logo.svg";
+import ImgBackground from "../../assets/background.png";
 import axios from "axios";
-import { loginSuccess } from "@redux/reducers/authSlice";
+import { loginSuccess } from "../../redux/reducers/authSlice";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const initialValues = {
-    username: "admin",
-    password: "123456"
+
   }
   const [isFetching, setIsFetching] = useState(false);
+  const recaptchaRef = React.createRef<any>();
   const handleSubmit = async (values: {
     username: string;
     password: string;
   }) => {
     try {
       setIsFetching(true);
-      let response = await axios.post(`${API_BASE_URL}/ajax/login`, {
+      let url = `${API_BASE_URL}/${API_PREFIX}/ajax/login`
+      console.log(url)
+      let response = await axios.post(url, {
         username: values.username,
-        password: values.password
+        password: values.password,
+        // "g-recaptcha-response": await recaptchaRef.current.executeAsync()
       });
       if (response.data.success) {
         dispatch(loginSuccess(response.data));
@@ -57,7 +61,7 @@ const Login: React.FC = () => {
               <span className={styles.formLogo}>
                 <img alt="logo" src={ImgLogo} />
               </span>
-              <span className="ant-pro-form-login-title">Admin</span>
+              <span className="ant-pro-form-login-title ">Admin</span>
             </div>
             <div className={styles.formDesc}>Đăng Nhập Vào Admin</div>
           </div>
@@ -88,6 +92,11 @@ const Login: React.FC = () => {
                     iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                   />
                 </Form.Item>
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  size="invisible"
+                  sitekey={RECAPTCHA_SITEKEY || ""}
+                />
                 <Button loading={isFetching} type="primary" htmlType="submit" block>Đăng Nhập</Button>
               </Space>
             </Form>

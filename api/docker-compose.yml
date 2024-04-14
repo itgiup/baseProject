@@ -3,13 +3,18 @@ services:
   database:
     image: mongo
     restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: baseProject
+    ports:
+      - 27017:27017
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: baseProject
     volumes:
       - ./docker_data/mongo:/data/db
+    # command: mongod --setParameter authenticationMechanisms=PLAIN,SCRAM-SHA-256 --auth && mongod -u root -p baseProject --authenticationDatabase root 127.0.0.1:27017/baseProject
   redis:
     image: redis
+    ports:
+      - 6379:6379
     volumes:
       - ./docker_data/redis:/data
     environment:

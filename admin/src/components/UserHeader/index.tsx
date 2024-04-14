@@ -1,13 +1,12 @@
 import React from "react";
 import { Avatar, Dropdown, Space } from "antd";
 import type { ItemType } from "antd/es/menu/hooks/useItems";
-import { useAppDispatch, useAppSelector } from "@redux/hooks";
-import { logoutUser } from "@redux/reducers/authSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { logoutUser } from "../../redux/reducers/authSlice";
 import { useNavigate } from "react-router-dom";
-import { AUTH_PATH } from "@configs/index";
+import { AUTH_PATH } from "../../configs";
 import { FaSignOutAlt } from "react-icons/fa";
-import ImgAvatar from "@assets/avatar.png";
-
+import ImgAvatar from "../../assets/avatar.png";
 const UserHeader: React.FC = () => {
   const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();

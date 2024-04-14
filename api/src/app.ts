@@ -10,7 +10,10 @@ import mongoose from "./plugins/mongoose";
 import { connect } from "mongoose";
 import configs from "./configs";
 import fastifyRecaptcha from "fastify-recaptcha";
-dotenv.config();
+
+const { expand } = require('dotenv-expand')
+const { log } = console
+expand(dotenv.config());
 
 const ADMIN = process.env.ADMIN;
 const API = process.env.API;
@@ -52,6 +55,7 @@ app.addHook("onRequest", async (request, reply) => {
       await request.jwtVerify();
     } else return;
   } catch (err) {
+    log("onRequest", request.url, request.params)
     reply.send({
       status: false,
       message: err.message
@@ -81,6 +85,7 @@ app.register(autoload, {
 });
 
 app.setNotFoundHandler((request, reply) => {
+  log("setNotFoundHandler", request.params)
   reply.send({
     success: false,
     message: `Route ${request.method}:${request.url} not found`
@@ -94,8 +99,6 @@ app.setErrorHandler((error, request, reply) => {
     message: error.message
   });
 });
-
-// console.error(configs.mongo)
 
 connect(configs.mongo.mongoUri, {
   autoIndex: true,
@@ -113,8 +116,10 @@ connect(configs.mongo.mongoUri, {
     app.logger.info(`Server listening on ${address}`);
   });
 }).catch((err) => {
-  console.log(err)
+  log(err)
   app.logger.error(err);
   process.exit(1);
 });
+
+log(process.env.MONGO_URI)
 

@@ -6,13 +6,15 @@ import { generateRegex } from ".";
 export const ParamSchema = Type.Object({
   id: Type.String()
 });
+
 // body datatable
 enum AjaxOrder {
   Asc = "ascend",
   Desc = "descend"
 }
+
 export const AjaxSchema = Type.Object({
-  Cookie: Type.Optional(Type.String()),
+  Todo: Type.Optional(Type.String()),
   pageSize: Type.Number({
     default: 10
   }),
@@ -28,6 +30,7 @@ export const AjaxSchema = Type.Object({
     default: AjaxOrder.Desc
   }))
 });
+
 // generate query for prisma
 export const genQuery = (body: {
   pageSize: number,

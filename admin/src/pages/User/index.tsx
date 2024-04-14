@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
-import { PAGE_LIMIT, PAGE_SIZE } from "@configs/index";
-import { InitalState } from "@typings/datatable";
-import { API, ITEM_NAME, ROLES, SEARCH_COLUMNS, UserState } from "./constant";
+import { PAGE_LIMIT, PAGE_SIZE } from "../../configs";
+import { IAjax, InitalState } from "../../typings/datatable";
+import { API, ITEM_NAME, SEARCH_COLUMNS, UserState } from "./constant";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
-import { FilterValue, SorterResult } from "antd/es/table/interface";
-import { Table, Row, Col, Space, Card, Button, Tooltip, message, Dropdown, Checkbox, MenuProps } from "antd";
+import { FilterValue } from "antd/es/table/interface";
+import { Table, Row, Col, Space, Breadcrumb, Card, Button, Tooltip, Popover, message, Menu, Dropdown, Checkbox } from "antd";
 import { Helmet } from "react-helmet";
 import { ReloadOutlined, SettingOutlined } from "@ant-design/icons";
-import { useAppDispatch, useAppSelector } from "@redux/hooks";
-import { initTable, toggleColumnHidden } from "@redux/reducers/tableSlice";
-import { convertFilter, numberFormat } from "@utils";
 import Add from "./Add";
 import Action from "./Action";
 import Delete from "./Delete";
 import Edit from "./Edit";
 import Search from "./Search";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { toggleColumnHidden } from "../../redux/reducers/tableSlice";
+import { convertFilter, numberFormat } from "../../utils";
 
 const initialState: InitalState = {
   pagination: {
@@ -29,37 +29,45 @@ const initialState: InitalState = {
   updated: 0
 }
 const User = () => {
-  const tableKey = "user";
-  const dispatch = useAppDispatch();
   const [state, setState] = useState(initialState);
+
   const fetchData = async () => {
     try {
       setState(prevState => ({
         ...prevState,
         loading: true
       }))
-      const response = await API.getAll({
+
+      const data: IAjax = {
         pageSize: state.pagination.pageSize,
         current: state.pagination.current,
         searchColumn: SEARCH_COLUMNS,
         search: state?.filters,
         field: state.sort?.field,
         order: state.sort?.order
-      });
-      setState((prevState) => ({
-        ...prevState,
-        data: response.data.data,
-        selectedRowKeys: [],
-        pagination: {
-          ...prevState.pagination,
-          total: response.data.recordsFiltered,
-        },
-      }))
-    } catch (ex) {
-      message.open({
-        type: "error",
-        content: ex?.response?.data?.message || ex?.message || "Đã xảy ra lỗi"
-      });
+      }
+      
+      if (API.getAll) {
+        const response = await API.getAll(data);
+        if (response.data.success) {
+          setState((prevState) => ({
+            ...prevState,
+            data: response.data.data,
+            selectedRowKeys: [],
+            pagination: {
+              ...prevState.pagination,
+              total: response.data.recordsFiltered,
+            },
+          }))
+        } else {
+          message.open({
+            type: "error",
+            content: response.data.message
+          });
+        }
+      }
+    } catch (error) {
+      console.error(error);
     } finally {
       setState((prevState) => ({
         ...prevState,
@@ -67,10 +75,12 @@ const User = () => {
       }))
     }
   }
+
   useEffect(() => {
     fetchData();
   }, [state.filters, state.pagination.current, state.sort, state.updated]);
-  const handleTableChange = (pagination: TablePaginationConfig, filters: Record<string, FilterValue | null>, sorter: SorterResult<any>) => {
+
+  const handleTableChange = (pagination: TablePaginationConfig, filters: Record<string, FilterValue | null>, sorter: any) => {
     setState(prevState => ({
       ...prevState,
       filters: {
@@ -84,36 +94,27 @@ const User = () => {
       },
       sort: {
         field: sorter.field?.toString(),
-        order: sorter.order,
+        order: sorter.order?.toString(),
       }
     }))
   }
+
   const handleReload = () => {
     setState(prevState => ({
       ...prevState,
       updated: prevState.updated + 1
     }))
   }
+
   const TABLE_COLUMNS: ColumnsType<UserState> = [{
     title: "Username",
     dataIndex: "username",
     key: "username",
     sorter: true,
     showSorterTooltip: false,
-    render: (value: string) => {
+    render: (value: string, record) => {
       return (
         <span>{value}</span>
-      )
-    }
-  }, {
-    title: "Profiles",
-    dataIndex: "Profiles",
-    key: "Profiles",
-    sorter: false,
-    showSorterTooltip: false,
-    render: (value: string) => {
-      return (
-        <Button>{numberFormat(value)} profiles</Button>
       )
     }
   }, {
@@ -122,17 +123,16 @@ const User = () => {
     key: "role",
     sorter: true,
     showSorterTooltip: false,
-    filters: [...convertFilter(ROLES)],
-    render: (value: string) => {
+    render: (value: string, record) => {
       return (
-        <Button>{value}</Button>
+        <span>{value}</span>
       )
     }
   }, {
     title: "Action",
     dataIndex: "id",
     key: "action",
-    render: (_: string, record) => {
+    render: (value: string, record) => {
       return (
         <>
           <Space>
@@ -145,10 +145,9 @@ const User = () => {
   }];
 
   // visible columns
+  const tableKey = "user";
   const hiddenColumns = useAppSelector((state) => state.table[tableKey]);
-  if (!hiddenColumns) {
-    dispatch(initTable(tableKey));
-  }
+  const dispatch = useAppDispatch();
 
   const handleColumnVisibility = (column: string) => {
     dispatch(toggleColumnHidden({
@@ -156,21 +155,25 @@ const User = () => {
       column
     }))
   };
+
   const VISIBLE_COLUMNS = TABLE_COLUMNS.filter(
     (column) => !hiddenColumns.includes(String(column.key))
   );
 
-  const items: MenuProps["items"] = TABLE_COLUMNS.map((column) => ({
-    key: column.key,
-    label: (
-      <Checkbox
-        checked={!hiddenColumns.includes(String(column.key))}
-        onChange={() => handleColumnVisibility(String(column.key))}
-      >
-        {String(column.title)}
-      </Checkbox>
-    )
-  }));
+  const menu = (
+    <Menu>
+      {TABLE_COLUMNS.map((column) => (
+        <Menu.Item key={column.key}>
+          <Checkbox
+            checked={!hiddenColumns.includes(String(column.key))}
+            onChange={() => handleColumnVisibility(String(column.key))}
+          >
+            {String(column.title)}
+          </Checkbox>
+        </Menu.Item>
+      ))}
+    </Menu>
+  );
 
   return (
     <>
@@ -178,24 +181,27 @@ const User = () => {
         <meta charSet="utf-8" />
         <title>{ITEM_NAME}</title>
       </Helmet>
-      <Card style={{
-        marginTop: 16
-      }}>
+      <Breadcrumb>
+        <Breadcrumb.Item>Trang Chủ</Breadcrumb.Item>
+        <Breadcrumb.Item>{ITEM_NAME}</Breadcrumb.Item>
+      </Breadcrumb>
+      <Card>
         <Row gutter={[16, 16]} className="row-actions">
-          <Col md={12} sm={24} className="ant-col-filters">
+          <Col md={16} sm={24} className="ant-col-filters">
             <Tooltip title="Reload">
               <Button icon={<ReloadOutlined />} onClick={handleReload} loading={state.loading} />
             </Tooltip>
-            <Dropdown menu={{ items }}>
-              <Button icon={<SettingOutlined />}/>
+            <Dropdown overlay={menu}>
+              <Button icon={<SettingOutlined />} />
             </Dropdown>
             <Search
               setState={setState}
+              filters={state.filters}
             />
           </Col>
-          <Col md={12} sm={24} className="right-aligned ant-col-actions">
+          <Col md={8} sm={24} className="right-aligned ant-col-actions">
             <Space>
-              <Action ids={state.selectedRowKeys} onReload={handleReload} />
+              <Action ids={state.selectedRowKeys} setState={setState} />
               <Add onReload={handleReload} />
             </Space>
           </Col>
@@ -208,12 +214,12 @@ const User = () => {
           pagination={state.pagination}
           loading={state.loading}
           tableLayout="auto"
-          rowKey="id"
+          rowKey="_id"
           rowSelection={{
             selectedRowKeys: state.selectedRowKeys,
             type: "checkbox",
             preserveSelectedRowKeys: false,
-            onChange: (key: React.Key[]) => {
+            onChange: (key: any) => {
               setState(prevState => ({
                 ...prevState,
                 selectedRowKeys: key

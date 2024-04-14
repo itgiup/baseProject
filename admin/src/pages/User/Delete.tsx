@@ -1,29 +1,55 @@
-import React, { useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Button, message, Popconfirm } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-import { ItemProps } from "@typings/datatable";
-import { API, ITEM_NAME, UserState } from "./constant";
+import { InitalProps } from "../../typings/datatable";
+import { API, ITEM_NAME } from "./constant";
 
-const Delete: React.FC<ItemProps<UserState>> = ({ onReload, item }) => {
+const Delete: React.FC<InitalProps> = (props) => {
+  const { onReload, item } = props;
   const [loading, setLoading] = useState(false);
+
   const confirm = async () => {
     try {
-      setLoading(true);
-      await API.deleteItem(item.id);
-      message.open({
-        type: "success",
-        content: `Đã xóa ${ITEM_NAME} thành công`
-      });
-      onReload();
-    } catch (ex) {
+      if (API.deleteItem) {
+        setLoading(true);
+        const response = await API.deleteItem(item._id);
+        if (response.data.success) {
+          message.open({
+            type: "success",
+            content: `Đã xóa ${ITEM_NAME} thành công`
+          });
+          if (onReload) onReload();
+        } else {
+          message.open({
+            type: "error",
+            content: response.data.message
+          });
+        }
+      }
+    } catch (error) {
+      console.error(error);
       message.open({
         type: "error",
-        content: ex?.response?.data?.message || ex?.message || "Đã xảy ra lỗi"
+        content: "Đã xảy ra lỗi"
       });
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (loading) {
+      message.open({
+        key: "loading",
+        type: "loading",
+        content: "Loading...",
+        duration: 0
+      });
+    } else {
+      message.destroy("loading");
+    }
+  }, [loading]);
+  
   return (
     <>
       <Popconfirm
@@ -34,7 +60,6 @@ const Delete: React.FC<ItemProps<UserState>> = ({ onReload, item }) => {
       >
         <Button
           danger
-          loading={loading}
           icon={<DeleteOutlined />}
         />
       </Popconfirm>
@@ -42,4 +67,4 @@ const Delete: React.FC<ItemProps<UserState>> = ({ onReload, item }) => {
   );
 };
 
-export default Delete;
+export default memo(Delete);

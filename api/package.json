@@ -5,7 +5,9 @@
   "scripts": {
     "start": "node dist/app",
     "build": "tsc",
-    "dev": "npx ts-node src/app.ts"
+    "dev": "npx nodemon src/app.ts",
+    "initapp": "ts-node src/init",
+    "test": "npx nodemon src/test.ts"
   },
   "author": "",
   "license": "ISC",
@@ -26,10 +28,12 @@
     "@fastify/jwt": "^8.0.0",
     "@sinclair/typebox": "^0.32.20",
     "dotenv": "^16.4.5",
+    "dotenv-expand": "^11.0.6",
     "fastify": "^4.26.2",
     "fastify-plugin": "^4.5.1",
     "fastify-recaptcha": "^1.0.0",
     "ioredis": "^5.3.2",
+    "mongodb": "^6.5.0",
     "mongoose": "^8.3.1",
     "path": "^0.12.7",
     "telegraf": "^4.16.3",
