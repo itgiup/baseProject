@@ -7,11 +7,7 @@ import i18n from '../services/i18n';
 import { change, loadSettings, } from '../store/settings';
 import WalletConnectButton from '../components/WalletConnectButton';
 
-
 const { log, error, warn } = console
-
-
-
 
 type Props = {
     [name: string]: any

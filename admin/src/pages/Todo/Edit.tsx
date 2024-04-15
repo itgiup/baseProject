@@ -1,9 +1,8 @@
 import React, { memo, useState } from "react";
 import { InitalProps } from "../../typings/datatable";
 import { API, ITEM_NAME, State, StateColor, TodoState } from "./constant";
-import { message, Button, Form, Input, Modal, Space, Tooltip, Checkbox, Radio, Tag } from "antd";
+import { message, Button, Form, Input, Modal, Space, Tooltip, Radio, Tag } from "antd";
 import { EditOutlined } from "@ant-design/icons";
-import { v4 } from "uuid";
 
 const Edit: React.FC<InitalProps> = (props) => {
   const { onReload, item } = props;

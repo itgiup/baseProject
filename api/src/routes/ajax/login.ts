@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
-import { UserSchema, UserType } from "./schema";
 import bcrypt from "bcrypt";
+import { UserSchema, UserType } from "../admin/user/add";
 
 const { log } = console;
 
@@ -25,7 +25,6 @@ export default async (fastify: FastifyInstance) => {
 
         if (!user) return reply.send({ success: false, message: 'Incorrect username and password' });
         const verify = await bcrypt.compare(password, user.password);
-        console.log({ verify });
 
         if (!verify) return reply.send({ success: false, message: 'Incorrect username and password' });
         const token = fastify.jwt.sign({ id: user.id, username: user.username });

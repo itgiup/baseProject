@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
-import { UserSchema, UserType } from "./schema";
 import bcrypt from "bcrypt";
+import { UserSchema, UserType } from "../admin/user/add";
 
 export const saltRounds = 10;
 
@@ -23,7 +23,7 @@ export default async (fastify: FastifyInstance) => {
       try {
         const { username, password } = request.body;
         const hash = await hashPassword(password);
-        
+
         const user = await fastify.mongoose.User.findOne({
           username
         });

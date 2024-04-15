@@ -4,7 +4,7 @@ import { IAjax, InitalState } from "../../typings/datatable";
 import { API, ITEM_NAME, SEARCH_COLUMNS, UserState } from "./constant";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { FilterValue } from "antd/es/table/interface";
-import { Table, Row, Col, Space, Breadcrumb, Card, Button, Tooltip, Popover, message, Menu, Dropdown, Checkbox } from "antd";
+import { Table, Row, Col, Space, Breadcrumb, Card, Button, Tooltip, message, Menu, Dropdown, Checkbox } from "antd";
 import { Helmet } from "react-helmet";
 import { ReloadOutlined, SettingOutlined } from "@ant-design/icons";
 import Add from "./Add";

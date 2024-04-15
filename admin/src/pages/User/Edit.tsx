@@ -1,7 +1,7 @@
 import React, { memo, useState } from "react";
 import { InitalProps } from "../../typings/datatable";
 import { API, ITEM_NAME, Role, UserState } from "./constant";
-import { message, Button, Form, Input, Modal, Select, Space, Tooltip, Radio } from "antd";
+import { message, Button, Form, Input, Modal, Space, Tooltip, Radio } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
 const Edit: React.FC<InitalProps> = (props) => {

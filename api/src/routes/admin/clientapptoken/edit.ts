@@ -1,8 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { Static, Type } from "@sinclair/typebox";
 import { ParamSchema } from "../../../utils/datatable";
-import bcrypt from "bcrypt";
-const saltRounds = 10;
 
 const BodySchema = Type.Object({
   name: Type.Optional(Type.String()),

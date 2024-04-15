@@ -2,7 +2,7 @@ import { FilterState, OptionState } from "../typings/datatable";
 const getUrl = (key: string): string => {
   let pathInfo = key.split("_");
   pathInfo = pathInfo.filter((item) => {
-    return item != "item";
+    return item !== "item";
   });
   return pathInfo.join("/");
 }
