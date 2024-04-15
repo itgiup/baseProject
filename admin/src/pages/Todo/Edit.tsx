@@ -1,7 +1,7 @@
 import React, { memo, useState } from "react";
 import { InitalProps } from "../../typings/datatable";
-import { API, ITEM_NAME, TodoState } from "./constant";
-import { message, Button, Form, Input, Modal, Space, Tooltip, Checkbox } from "antd";
+import { API, ITEM_NAME, State, StateColor, TodoState } from "./constant";
+import { message, Button, Form, Input, Modal, Space, Tooltip, Checkbox, Radio, Tag } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { v4 } from "uuid";
 
@@ -79,59 +79,29 @@ const Edit: React.FC<InitalProps> = (props) => {
           initialValues={initialValues}
           onFinish={onSubmit}
         >
+
+
           <Form.Item
-            label="Name"
-            name="name"
+            label="Content"
+            name="content"
             rules={[{ required: true, message: "Thông tin bắt buộc" }]}
           >
-            <Input />
+            <Input.TextArea />
           </Form.Item>
+
           <Form.Item
-            label="Url"
-            name="url"
+            label="State"
+            name="state"
             rules={[{ required: true, message: "Thông tin bắt buộc" }]}
           >
-            <Input />
+            <Radio.Group>
+              {Object.entries(State).map(([key, value]) => (
+                <Tag color={StateColor[value]}> <Radio value={value}>{value}</Radio></Tag>
+              ))}
+            </Radio.Group>
           </Form.Item>
-          <Form.Item
-            label="Timeout"
-            name="timeout"
-            rules={[{ required: true, message: "Thông tin bắt buộc" }]}
-          >
-            <Input type="number" />
-          </Form.Item>
-          <Form.Item
-            label="Timeout 2"
-            name="timeout2"
-            rules={[{ required: true, message: "Thông tin bắt buộc" }]}
-          >
-            <Input type="number" />
-          </Form.Item>
-          <Form.Item
-            label="Skip OTP"
-            name="skipOTP"
-            valuePropName="checked"
-          >
-            <Checkbox />
-          </Form.Item>
-          <Form.Item
-            label="Log message"
-            name="logMessage"
-          >
-            <Input type="string" />
-          </Form.Item>
-          <Form.Item
-            label="Token"
-            name="token"
-            rules={[{ required: true, message: "Thông tin bắt buộc" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Button onClick={() => {
-            form.setFieldsValue({
-              token: v4(),
-            })
-          }}>Lấy token</Button>
+
+
         </Form>
       </Modal>
     </>

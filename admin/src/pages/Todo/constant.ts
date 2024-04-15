@@ -9,7 +9,7 @@ export enum State {
   FAILED = 'failed',
 }
 
-export const StateColor = {
+export const StateColor: { [state: string]: string } = {
   [State.PENDING]: 'warning',
   [State.SUCCESS]: 'success',
   [State.FAILED]: 'error',

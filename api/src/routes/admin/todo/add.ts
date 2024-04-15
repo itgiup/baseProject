@@ -27,7 +27,6 @@ export default async (fastify: FastifyInstance) => {
                 const response = await fastify.mongoose.Todo.create({
                     content, state
                 });
-                console.log(response);
                 reply.send({
                     success: true,
                     data: response

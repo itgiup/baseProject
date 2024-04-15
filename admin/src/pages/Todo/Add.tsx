@@ -70,8 +70,6 @@ const Add: React.FC<InitalProps> = (props) => {
           </Space>
         </div>}
       >
-
-
         <Form
           form={form}
           id="frm-add"
@@ -99,6 +97,7 @@ const Add: React.FC<InitalProps> = (props) => {
             </Radio.Group>
           </Form.Item>
         </Form>
+        
       </Modal>
     </>
   )

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { PAGE_LIMIT, PAGE_SIZE } from "../../configs";
 import { IAjax, InitalState } from "../../typings/datatable";
-import { API, ITEM_NAME, SEARCH_COLUMNS, TodoState } from "./constant";
+import { API, ITEM_NAME, SEARCH_COLUMNS, StateColor, TodoState } from "./constant";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { FilterValue } from "antd/es/table/interface";
-import { Table, Row, Col, Space, Breadcrumb, Card, Button, Tooltip, message, Menu, Dropdown, Checkbox } from "antd";
+import { Table, Row, Col, Space, Breadcrumb, Card, Button, Tooltip, message, Menu, Dropdown, Checkbox, Tag, Radio } from "antd";
 import { Helmet } from "react-helmet";
 import { ReloadOutlined, SettingOutlined } from "@ant-design/icons";
 import Add from "./Add";
@@ -15,7 +15,8 @@ import Search from "./Search";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { toggleColumnHidden } from "../../redux/reducers/tableSlice";
 import { numberFormat } from "../../utils";
-import CopyToClipboard from "react-copy-to-clipboard";
+// import CopyToClipboard from "react-copy-to-clipboard";
+import { BtnCopy } from "../../components";
 
 const initialState: InitalState = {
   pagination: {
@@ -109,11 +110,11 @@ const Todo = () => {
     render: (value: string, record) => {
       return (
         <>
-          <CopyToClipboard text={value || ""} onCopy={() => {
+          {/* <CopyToClipboard text={value || ""} onCopy={() => {
             message.success("Copied");
-          }}>
-            {value}
-          </CopyToClipboard>
+          }}> */}
+          {value} <BtnCopy value={value} />
+          {/* </CopyToClipboard> */}
         </>
       )
     }
@@ -124,9 +125,10 @@ const Todo = () => {
     key: "state",
     sorter: false,
     showSorterTooltip: false,
-    render: (value: boolean, record) => {
+    render: (value: string, record) => {
       return (
-        <>{value ? "Yes" : "No"}</>
+        value && StateColor[value] ?
+          <Tag color={StateColor?.[value]}> <Radio value={value} checked={true}>{value}</Radio></Tag> : ""
       )
     }
   },
