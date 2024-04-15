@@ -1,15 +1,12 @@
 import React, { memo, useState } from "react";
 import { InitalProps } from "../../typings/datatable";
-import { API, ITEM_NAME, TodoState } from "./constant";
-import { message, Button, Form, Input, Modal, Space } from "antd";
+import { API, ITEM_NAME, State, StateColor, TodoState } from "./constant";
+import { message, Button, Form, Input, Modal, Space, Radio, Tag } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { v4 } from "uuid";
-import {Simulate} from "react-dom/test-utils";
-import lostPointerCapture = Simulate.lostPointerCapture;
 
 const Add: React.FC<InitalProps> = (props) => {
   const { onReload } = props;
-  const initialValues = {}
+  const initialValues = { state: State.PENDING }
   const [visible, setVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
@@ -17,7 +14,7 @@ const Add: React.FC<InitalProps> = (props) => {
     try {
       if (API.addItem) {
         setLoading(true);
-        const payload = {...values, timeout: Number(values.timeout) }
+        const payload = { ...values }
         const response = await API.addItem(payload);
         if (response.data.success) {
           message.open({
@@ -73,6 +70,8 @@ const Add: React.FC<InitalProps> = (props) => {
           </Space>
         </div>}
       >
+
+
         <Form
           form={form}
           id="frm-add"
@@ -81,38 +80,24 @@ const Add: React.FC<InitalProps> = (props) => {
           onFinish={onSubmit}
         >
           <Form.Item
-            label="Name"
-            name="name"
+            label="Content"
+            name="content"
             rules={[{ required: true, message: "Thông tin bắt buộc" }]}
           >
-            <Input />
+            <Input.TextArea />
           </Form.Item>
+
           <Form.Item
-            label="Url"
-            name="url"
+            label="State"
+            name="state"
             rules={[{ required: true, message: "Thông tin bắt buộc" }]}
           >
-            <Input />
+            <Radio.Group>
+              {Object.entries(State).map(([key, value]) => (
+                <Tag color={StateColor[value]}> <Radio value={value}>{value}</Radio></Tag>
+              ))}
+            </Radio.Group>
           </Form.Item>
-          <Form.Item
-            label="Timeout"
-            name="timeout"
-            rules={[{ required: true, message: "Thông tin bắt buộc" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Token"
-            name="token"
-            rules={[{ required: true, message: "Thông tin bắt buộc" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Button onClick={() => {
-            form.setFieldsValue({
-              token: v4(),  
-            })
-          }}>Lấy token</Button>
         </Form>
       </Modal>
     </>

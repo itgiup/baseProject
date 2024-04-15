@@ -101,68 +101,27 @@ const Todo = () => {
     }))
   }
   const TABLE_COLUMNS: ColumnsType<TodoState> = [{
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
+    title: "Content",
+    dataIndex: "content",
+    key: "content",
     sorter: true,
     showSorterTooltip: false,
     render: (value: string, record) => {
       return (
         <>
-          <CopyToClipboard text={record?.token || ""} onCopy={() => {
+          <CopyToClipboard text={value || ""} onCopy={() => {
             message.success("Copied");
           }}>
-            <Button type="link">
-              {value}
-            </Button>
+            {value}
           </CopyToClipboard>
         </>
       )
     }
-  }, {
-    title: "Token",
-    dataIndex: "token",
-    key: "token",
-    sorter: true,
-    showSorterTooltip: false,
-    render: (value: string, record) => {
-      return (
-        <span>{value}</span>
-      )
-    }
   },
   {
-    title: "Timeout",
-    dataIndex: "timeout",
-    key: "timeout",
-    sorter: false,
-    showSorterTooltip: false,
-    render: (value: number, record) => {
-      return (
-        <>
-          {value}s
-        </>
-      )
-    }
-  },
-  {
-    title: "Timeout 2",
-    dataIndex: "timeout2",
-    key: "timeout2",
-    sorter: false,
-    showSorterTooltip: false,
-    render: (value: number, record) => {
-      return (
-        <>
-          {value}s
-        </>
-      )
-    }
-  },
-  {
-    title: "Skip OTP",
-    dataIndex: "skipOTP",
-    key: "skipOTP",
+    title: "State",
+    dataIndex: "state",
+    key: "state",
     sorter: false,
     showSorterTooltip: false,
     render: (value: boolean, record) => {

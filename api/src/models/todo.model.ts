@@ -8,7 +8,7 @@ export enum State {
 
 interface ITodo {
   content: string,
-  state: State,
+  state?: State,
   createdAt: Date,
   updatedAt: Date
 }
@@ -34,7 +34,7 @@ const schema = new Schema<ITodo>({
   strict: false,
 });
 
-const Todo = model<ITodo, ITodoModel>("Todos", schema);
+const Todo = model<ITodo, ITodoModel>("Todo", schema);
 
 export {
   Todo,

@@ -1,7 +1,7 @@
 import axios from "./axios";
 import ApiState, { ApiResponse } from "../typings/api";
-import { TodoState } from "../pages/Todo/constant";
 import { AxiosResponse } from "axios";
+import { TodoState } from "../pages/Todo/constant";
 const pathApi = "todo";
 interface ProxyGroupApiState extends ApiState<TodoState> {
   all: () => Promise<AxiosResponse<ApiResponse<TodoState[]>>>;

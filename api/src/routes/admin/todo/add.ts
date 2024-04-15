@@ -14,19 +14,20 @@ export default async (fastify: FastifyInstance) => {
         method: "POST",
         url: "/add",
         schema: {
-            body: BodySchema 
+            body: BodySchema
         },
         handler: async (request, reply) => {
             try {
-                const { content, state } = request.body;
 
-                const r = await fastify.mongoose.User.findOne({
+                const { content, state } = request.body;
+                const r = await fastify.mongoose.Todo.findOne({
                     content
                 });
                 if (r) throw new Error("Todo already exists");
-                const response = await fastify.mongoose.User.create({
+                const response = await fastify.mongoose.Todo.create({
                     content, state
                 });
+                console.log(response);
                 reply.send({
                     success: true,
                     data: response

@@ -191,7 +191,6 @@ const ClientAppToken = () => {
   const tableKey = "clientapptoken";
   const hiddenColumns = useAppSelector((state) => state.table[tableKey]);
   const dispatch = useAppDispatch();
-console.log(state);
 
   const handleColumnVisibility = (column: string) => {
     dispatch(toggleColumnHidden({
