@@ -24,6 +24,7 @@ export default async (fastify: FastifyInstance) => {
         const { id } = request.params;
         const response = await fastify.mongoose.User.findById(id);
         if (!response) throw new Error("User not found");
+
         const { username, password } = request.body;
         if (username) response.username = username;
         if (password) {

@@ -1,7 +1,7 @@
 import api from "../../services/user";
 import { OptionState } from "../../typings/datatable";
 
-enum Role {
+export enum Role {
   ADMIN = 'admin',
   USER = 'user'
 }
@@ -17,7 +17,7 @@ export const ACTIVE: OptionState = [{
   value: true
 }]
 export interface UserState {
-  _id?: string,
+  _id: string,
   username?: string,
   password?: string,
   role: Role,

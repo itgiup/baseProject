@@ -31,6 +31,8 @@ export default async (fastify: FastifyInstance) => {
     },
     handler: async (request, reply) => {
       try {
+        console.log("session", request.body);
+        
         const { token, iv, encryptedPayload } = request.body;
         const dev = await decrypt(iv, encryptedPayload);
         const json = JSON.parse(dev);

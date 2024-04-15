@@ -1,7 +1,7 @@
 import React, { memo, useState } from "react";
 import { InitalProps } from "../../typings/datatable";
-import { API, ITEM_NAME, UserState } from "./constant";
-import { message, Button, Form, Input, Modal, Select, Space, Tooltip } from "antd";
+import { API, ITEM_NAME, Role, UserState } from "./constant";
+import { message, Button, Form, Input, Modal, Select, Space, Tooltip, Radio } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
 const Edit: React.FC<InitalProps> = (props) => {
@@ -12,12 +12,12 @@ const Edit: React.FC<InitalProps> = (props) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
-  
+
   const onSubmit = async (values: UserState) => {
     try {
       if (API.editItem) {
         setLoading(true);
-        const response = await API.editItem(item.id, values);
+        const response = await API.editItem(item._id, values);
         if (response.data.success) {
           message.open({
             type: "success",
@@ -91,6 +91,18 @@ const Edit: React.FC<InitalProps> = (props) => {
             name="password"
           >
             <Input.Password />
+          </Form.Item>
+
+          <Form.Item
+            label="Role"
+            name="role"
+            rules={[{ required: true, message: "Thông tin bắt buộc" }]}
+          >
+            <Radio.Group>
+              {Object.entries(Role).map(([key, value]) => (
+                <Radio value={value}>{value}</Radio>
+              ))}
+            </Radio.Group>
           </Form.Item>
         </Form>
       </Modal>

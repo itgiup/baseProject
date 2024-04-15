@@ -49,6 +49,8 @@ const User = () => {
 
       if (API.getAll) {
         const response = await API.getAll(data);
+        console.log(response.data.data);
+
         if (response.data.success) {
           setState((prevState) => ({
             ...prevState,

@@ -1,18 +1,18 @@
 import React, { memo, useState } from "react";
 import { InitalProps } from "../../typings/datatable";
-import { API, ITEM_NAME, UserState } from "./constant";
-import { message, Button, Form, Input, Modal, Select, Space } from "antd";
+import { API, ITEM_NAME, Role, UserState } from "./constant";
+import { message, Button, Form, Input, Modal, Select, Space, Radio } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 const Add: React.FC<InitalProps> = (props) => {
   const { onReload } = props;
   const initialValues = {
-    
+    role: Role.USER
   }
   const [visible, setVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
-  
+
   const onSubmit = async (values: UserState) => {
     try {
       if (API.addItem) {
@@ -43,7 +43,7 @@ const Add: React.FC<InitalProps> = (props) => {
       setLoading(false);
     }
   }
-  
+
   return (
     <>
       <Button
@@ -92,6 +92,18 @@ const Add: React.FC<InitalProps> = (props) => {
             name="password"
           >
             <Input.Password />
+          </Form.Item>
+
+          <Form.Item
+            label="Role"
+            name="role"
+            rules={[{ required: true, message: "Thông tin bắt buộc" }]}
+          >
+            <Radio.Group>
+              {Object.entries(Role).map(([key, value]) => (
+                <Radio value={value}>{value}</Radio>
+              ))}
+            </Radio.Group>
           </Form.Item>
         </Form>
       </Modal>

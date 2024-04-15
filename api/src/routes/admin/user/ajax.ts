@@ -22,6 +22,7 @@ export default async (fastify: FastifyInstance) => {
           .skip(query.skip);
 
         const total = await fastify.mongoose.User.countDocuments(query.where);
+        
         reply.send({
           success: true,
           data: response,
