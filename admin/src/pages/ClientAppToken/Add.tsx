@@ -1,6 +1,6 @@
 import React, { memo, useState } from "react";
 import { InitalProps } from "../../typings/datatable";
-import { API, ITEM_NAME, ExtensionState } from "./constant";
+import { API, ITEM_NAME, ClientAppTokenState } from "./constant";
 import { message, Button, Form, Input, Modal, Space } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { v4 } from "uuid";
@@ -13,7 +13,7 @@ const Add: React.FC<InitalProps> = (props) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
-  const onSubmit = async (values: ExtensionState) => {
+  const onSubmit = async (values: ClientAppTokenState) => {
     try {
       if (API.addItem) {
         setLoading(true);

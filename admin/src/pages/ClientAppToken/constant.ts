@@ -2,7 +2,7 @@ import api from "../../services/clientapptoken";
 export const ITEM_NAME = "Client App Token";
 export const SEARCH_COLUMNS: string[] = ["name", "description"];
 export const API = api;
-export interface ExtensionState {
+export interface ClientAppTokenState {
   _id?: string,
   name?: string,
   url?: string,

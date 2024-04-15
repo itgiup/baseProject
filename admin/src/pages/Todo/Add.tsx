@@ -1,30 +1,31 @@
 import React, { memo, useState } from "react";
 import { InitalProps } from "../../typings/datatable";
-import { API, ITEM_NAME, ClientAppTokenState } from "./constant";
-import { message, Button, Form, Input, Modal, Space, Tooltip, Checkbox } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import { API, ITEM_NAME, TodoState } from "./constant";
+import { message, Button, Form, Input, Modal, Space } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import { v4 } from "uuid";
+import {Simulate} from "react-dom/test-utils";
+import lostPointerCapture = Simulate.lostPointerCapture;
 
-const Edit: React.FC<InitalProps> = (props) => {
-  const { onReload, item } = props;
-  const initialValues = {
-    ...item
-  }
+const Add: React.FC<InitalProps> = (props) => {
+  const { onReload } = props;
+  const initialValues = {}
   const [visible, setVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
-  const onSubmit = async (values: ClientAppTokenState) => {
+  const onSubmit = async (values: TodoState) => {
     try {
-      if (API.editItem) {
+      if (API.addItem) {
         setLoading(true);
-        const payload = {...values, timeout: Number(values.timeout), timeout2: Number(values.timeout2)};
-        const response = await API.editItem(item._id, payload);
+        const payload = {...values, timeout: Number(values.timeout) }
+        const response = await API.addItem(payload);
         if (response.data.success) {
           message.open({
             type: "success",
-            content: `Đã sửa ${ITEM_NAME} thành công`,
+            content: `Đã thêm ${ITEM_NAME} thành công`
           });
           setVisible(false);
+          form.resetFields();
           if (onReload) onReload();
         } else {
           message.open({
@@ -45,15 +46,15 @@ const Edit: React.FC<InitalProps> = (props) => {
   }
   return (
     <>
-      <Tooltip title="Sửa">
-        <Button
-          onClick={() => setVisible(true)}
-          icon={<EditOutlined />}
-        >
-        </Button>
-      </Tooltip>
+      <Button
+        onClick={() => setVisible(true)}
+        type="primary"
+        icon={<PlusOutlined />}
+      >
+        Thêm mới
+      </Button>
       <Modal
-        title={`Sửa ${ITEM_NAME}`}
+        title={`Thêm ${ITEM_NAME}`}
         open={visible}
         onCancel={() => setVisible(false)}
         destroyOnClose
@@ -66,7 +67,7 @@ const Edit: React.FC<InitalProps> = (props) => {
             >
               Huỷ
             </Button>
-            <Button form="frm-edit" htmlType="submit" type="primary" loading={loading}>
+            <Button form="frm-add" htmlType="submit" type="primary" loading={loading}>
               Lưu
             </Button>
           </Space>
@@ -74,7 +75,7 @@ const Edit: React.FC<InitalProps> = (props) => {
       >
         <Form
           form={form}
-          id="frm-edit"
+          id="frm-add"
           layout="vertical"
           initialValues={initialValues}
           onFinish={onSubmit}
@@ -98,32 +99,12 @@ const Edit: React.FC<InitalProps> = (props) => {
             name="timeout"
             rules={[{ required: true, message: "Thông tin bắt buộc" }]}
           >
-            <Input type="number" />
+            <Input />
           </Form.Item>
           <Form.Item
-              label="Timeout 2"
-              name="timeout2"
-              rules={[{ required: true, message: "Thông tin bắt buộc" }]}
-          >
-            <Input type="number" />
-          </Form.Item>
-          <Form.Item
-            label="Skip OTP"
-            name="skipOTP"
-            valuePropName="checked"
-          >
-            <Checkbox />
-          </Form.Item>
-          <Form.Item
-              label="Log message"
-              name="logMessage"
-          >
-            <Input type="string" />
-          </Form.Item>
-          <Form.Item
-              label="Token"
-              name="token"
-              rules={[{ required: true, message: "Thông tin bắt buộc" }]}
+            label="Token"
+            name="token"
+            rules={[{ required: true, message: "Thông tin bắt buộc" }]}
           >
             <Input />
           </Form.Item>
@@ -138,4 +119,4 @@ const Edit: React.FC<InitalProps> = (props) => {
   )
 }
 
-export default memo(Edit);
+export default memo(Add);

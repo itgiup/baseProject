@@ -14,7 +14,7 @@ export default async (fastify: FastifyInstance) => {
     handler: async (request, reply) => {
       try {
         const { id } = request.params;
-        await fastify.mongoose.Extension.findByIdAndDelete(id);
+        await fastify.mongoose.ClientAppToken.findByIdAndDelete(id);
         reply.send({
           success: true
         });

@@ -1,5 +1,11 @@
 import api from "../../services/user";
 import { OptionState } from "../../typings/datatable";
+
+enum Role {
+  ADMIN = 'admin',
+  USER = 'user'
+}
+
 export const ITEM_NAME = "User";
 export const SEARCH_COLUMNS: string[] = ["username"];
 export const API = api;
@@ -14,7 +20,7 @@ export interface UserState {
   _id?: string,
   username?: string,
   password?: string,
-  role: string,
+  role: Role,
   createdAt?: Date,
   updatedAt?: Date
 }

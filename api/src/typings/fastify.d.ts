@@ -8,7 +8,7 @@ declare module "fastify" {
     redis: Redis,
     mongoose: {
       Todo: typeof Todo,
-      Extension: typeof Extension,
+      ClientAppToken: typeof ClientAppToken,
       User: typeof User
     }
   }

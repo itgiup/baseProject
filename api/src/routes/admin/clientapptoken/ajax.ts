@@ -14,11 +14,11 @@ export default async (fastify: FastifyInstance) => {
     handler: async (request, reply) => {
       try {
         const query = genQuery(request.body);
-        const response: any = await fastify.mongoose.Extension.find(query.where)
+        const response: any = await fastify.mongoose.ClientAppToken.find(query.where)
           .sort(query.sort)
           .limit(query.limit)
           .skip(query.skip);
-        const total = await fastify.mongoose.Extension.countDocuments(query.where);
+        const total = await fastify.mongoose.ClientAppToken.countDocuments(query.where);
         reply.send({
           success: true,
           data: response,

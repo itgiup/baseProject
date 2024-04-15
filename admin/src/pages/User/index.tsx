@@ -46,7 +46,7 @@ const User = () => {
         field: state.sort?.field,
         order: state.sort?.order
       }
-      
+
       if (API.getAll) {
         const response = await API.getAll(data);
         if (response.data.success) {

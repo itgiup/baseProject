@@ -2,6 +2,13 @@ import { FastifyInstance } from "fastify";
 import { Static, Type } from "@sinclair/typebox";
 import { hashPassword } from "../../ajax/register";
 
+export const UserSchema = Type.Object({
+  username: Type.String(),
+  password: Type.String()
+});
+
+export type UserType = Static<typeof UserSchema>;
+
 const BodySchema = Type.Object({
   username: Type.String(),
   password: Type.String(),

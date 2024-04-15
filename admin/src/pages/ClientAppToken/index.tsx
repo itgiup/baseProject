@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { PAGE_LIMIT, PAGE_SIZE } from "../../configs";
 import { IAjax, InitalState } from "../../typings/datatable";
-import { API, ITEM_NAME, SEARCH_COLUMNS, ExtensionState } from "./constant";
+import { API, ITEM_NAME, SEARCH_COLUMNS, ClientAppTokenState } from "./constant";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { FilterValue } from "antd/es/table/interface";
 import { Table, Row, Col, Space, Breadcrumb, Card, Button, Tooltip, message, Menu, Dropdown, Checkbox } from "antd";
@@ -100,7 +100,7 @@ const ClientAppToken = () => {
       updated: prevState.updated + 1
     }))
   }
-  const TABLE_COLUMNS: ColumnsType<ExtensionState> = [{
+  const TABLE_COLUMNS: ColumnsType<ClientAppTokenState> = [{
     title: "Name",
     dataIndex: "name",
     key: "name",
@@ -191,6 +191,7 @@ const ClientAppToken = () => {
   const tableKey = "clientapptoken";
   const hiddenColumns = useAppSelector((state) => state.table[tableKey]);
   const dispatch = useAppDispatch();
+console.log(state);
 
   const handleColumnVisibility = (column: string) => {
     dispatch(toggleColumnHidden({

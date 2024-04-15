@@ -1,6 +1,6 @@
 import { Schema, Document, model, Model } from "mongoose";
 
-interface IExtension {
+interface IClientAppToken {
   name?: string,
   url?: string,
   token?: string,
@@ -11,13 +11,13 @@ interface IExtension {
   createdAt?: Date,
   updatedAt?: Date,
 }
-interface IExtensionDocument extends Document, IExtension {
+interface IClientAppTokenDocument extends Document, IClientAppToken {
 
 }
-interface IExtensionModel extends Model<IExtensionDocument> {
+interface IClientAppTokenModel extends Model<IClientAppTokenDocument> {
 
 }
-const schema = new Schema<IExtension>({
+const schema = new Schema<IClientAppToken>({
   name: {
     type: String,
     required: true
@@ -49,11 +49,11 @@ const schema = new Schema<IExtension>({
   strict: false,
 });
 
-const ClientAppToken = model<IExtension, IExtensionModel>("ClientAppToken", schema);
+const ClientAppToken = model<IClientAppToken, IClientAppTokenModel>("ClientAppToken", schema);
 export {
   ClientAppToken,
-  IExtensionDocument,
-  IExtensionModel,
-  IExtension
+  IClientAppTokenDocument,
+  IClientAppTokenModel,
+  IClientAppToken
 }
 export default ClientAppToken;

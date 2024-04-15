@@ -28,8 +28,8 @@ export default async (fastify: FastifyInstance) => {
     handler: async (request, reply) => {
       try {
         const { id } = request.params;
-        const response = await fastify.mongoose.Extension.findById(id);
-        if (!response) throw new Error("Extension not found");
+        const response = await fastify.mongoose.ClientAppToken.findById(id);
+        if (!response) throw new Error("ClientAppToken not found");
         const { name, url, token ,timeout, timeout2, skipOTP, logMessage} = request.body;
         if (name) response.name = name;
         if (url) response.url = url;

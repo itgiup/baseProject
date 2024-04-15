@@ -24,7 +24,7 @@ export default async (fastify: FastifyInstance) => {
     handler: async (request, reply) => {
       try {
         const { name, url, token, timeout , timeout2, skipOTP} = request.body;
-        const response = await fastify.mongoose.Extension.create({
+        const response = await fastify.mongoose.ClientAppToken.create({
           name,
           url,
           token,

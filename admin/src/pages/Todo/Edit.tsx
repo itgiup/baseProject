@@ -1,6 +1,6 @@
 import React, { memo, useState } from "react";
 import { InitalProps } from "../../typings/datatable";
-import { API, ITEM_NAME, ClientAppTokenState } from "./constant";
+import { API, ITEM_NAME, TodoState } from "./constant";
 import { message, Button, Form, Input, Modal, Space, Tooltip, Checkbox } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { v4 } from "uuid";
@@ -13,11 +13,11 @@ const Edit: React.FC<InitalProps> = (props) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
-  const onSubmit = async (values: ClientAppTokenState) => {
+  const onSubmit = async (values: TodoState) => {
     try {
       if (API.editItem) {
         setLoading(true);
-        const payload = {...values, timeout: Number(values.timeout), timeout2: Number(values.timeout2)};
+        const payload = { ...values };
         const response = await API.editItem(item._id, payload);
         if (response.data.success) {
           message.open({
@@ -101,9 +101,9 @@ const Edit: React.FC<InitalProps> = (props) => {
             <Input type="number" />
           </Form.Item>
           <Form.Item
-              label="Timeout 2"
-              name="timeout2"
-              rules={[{ required: true, message: "Thông tin bắt buộc" }]}
+            label="Timeout 2"
+            name="timeout2"
+            rules={[{ required: true, message: "Thông tin bắt buộc" }]}
           >
             <Input type="number" />
           </Form.Item>
@@ -115,21 +115,21 @@ const Edit: React.FC<InitalProps> = (props) => {
             <Checkbox />
           </Form.Item>
           <Form.Item
-              label="Log message"
-              name="logMessage"
+            label="Log message"
+            name="logMessage"
           >
             <Input type="string" />
           </Form.Item>
           <Form.Item
-              label="Token"
-              name="token"
-              rules={[{ required: true, message: "Thông tin bắt buộc" }]}
+            label="Token"
+            name="token"
+            rules={[{ required: true, message: "Thông tin bắt buộc" }]}
           >
             <Input />
           </Form.Item>
           <Button onClick={() => {
             form.setFieldsValue({
-              token: v4(),  
+              token: v4(),
             })
           }}>Lấy token</Button>
         </Form>

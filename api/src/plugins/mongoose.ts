@@ -6,7 +6,7 @@ import { Todo } from "../models/todo.model";
 export default fastifyPlugin(async (server, options) => {
   const mongoose = {
     User,
-    Extension: ClientAppToken,
+    ClientAppToken: ClientAppToken,
     Todo
   }
   server.decorate("mongoose", mongoose);

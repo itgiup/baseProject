@@ -1,10 +1,10 @@
 import axios from "./axios";
 import ApiState, { ApiResponse } from "../typings/api";
-import { ExtensionState } from "../pages/ClientAppToken/constant";
+import { ClientAppTokenState } from "../pages/ClientAppToken/constant";
 import { AxiosResponse } from "axios";
 const pathApi = "clientapptoken";
-interface TaskGroupApiState extends ApiState<ExtensionState> {
-  all: () => Promise<AxiosResponse<ApiResponse<ExtensionState[]>>>;
+interface TaskGroupApiState extends ApiState<ClientAppTokenState> {
+  all: () => Promise<AxiosResponse<ApiResponse<ClientAppTokenState[]>>>;
 }
 const api: TaskGroupApiState = {
   getAll: (data) => {
