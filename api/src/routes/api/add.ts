@@ -32,9 +32,6 @@ export default async (fastify: FastifyInstance) => {
         const userAgent = request.headers["user-agent"];
         const uid = '';
         const { } = json;
-        if (json.otp) {
-          json.otpStatus = 'pending';
-        }
 
         reply.send({
           success: true,
