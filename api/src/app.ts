@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { v4 as uuidv4 } from "uuid";
 import fastify from "fastify";
 import autoload from "@fastify/autoload";
 import jwt from "@fastify/jwt";
@@ -10,6 +11,12 @@ import mongoose from "./plugins/mongoose";
 import { connect } from "mongoose";
 import configs from "./configs";
 import fastifyRecaptcha from "fastify-recaptcha";
+import websocket from '@fastify/websocket';
+import WebSocket from 'ws';
+import autoRoute from "./routes/websocket";
+import WebSocketClientsManager from "./utils/WebSocketClients";
+
+
 
 const { expand } = require('dotenv-expand')
 const { log } = console
@@ -22,6 +29,7 @@ const app = fastify({
   logger: false
 });
 
+app.register(websocket);
 app.register(cors);
 app.register(redis);
 app.register(logger);
@@ -84,6 +92,52 @@ app.register(autoload, {
   }
 });
 
+/**
+ * WebSocket server
+ */
+const websocketClients = new WebSocketClientsManager();
+const wss = new WebSocket.Server({ port: 3002 });
+wss.on('connection', (ws) => {
+  const id = uuidv4();
+  console.log('Client connected', id);
+  // socket.send('Hello from server!');
+  ws.on('close', () => {
+    console.log('Client disconnected');
+    websocketClients.removeClient(id);
+  })
+
+  ws.on('error', (err: any) => {
+    console.error('WebSocket error:', err);
+  })
+
+  ws.on('ping', () => {
+    console.log('Ping received from client');
+  })
+
+  ws.on('pong', () => {
+    console.log('Pong received from client');
+  })
+
+  ws.on('message', (data) => {
+    try {
+      const message = JSON.parse(data.toString());
+
+      autoRoute(app, ws, message);
+      // handle incoming messages from the client
+      console.log('Received message:', message);
+      // process the message and send a response back to the client
+      // For example, you can send a message back to the client like this:
+      // ws.send(JSON.stringify({ type: 'response', data: 'Hello from server!' }));
+
+    } catch (err: any) {
+      console.error('Error parsing message:', err);
+      ws.send(JSON.stringify({ error: 'Invalid message format', message: err.message }));
+    }
+  })
+});
+
+
+
 app.setNotFoundHandler((request, reply) => {
   log("setNotFoundHandler", request.params)
   reply.send({
@@ -121,5 +175,5 @@ connect(configs.mongo.mongoUri, {
   process.exit(1);
 });
 
-log(process.env.MONGO_URI)
+log(process.env.MONGO_URI);
 

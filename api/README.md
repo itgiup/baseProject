@@ -4,6 +4,9 @@ docker compose up
 yarn dev
 ```
 
+```bash
+ yarn add @fastify/autoload @fastify/cors @fastify/jwt @sinclair/typebox dotenv dotenv-expand fastify fastify-plugin fastify-recaptcha ioredis mongodb mongoose path telegraf winston 
+```
 
 # Deploy
 1. Tạo gg recaptcha
